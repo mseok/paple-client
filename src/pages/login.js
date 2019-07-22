@@ -52,7 +52,9 @@ class Login extends Component {
                 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nanum+Gothic" />*/}
                 <div className="wrap">
                     <div className="header" style={{paddingTop: '132px', width: '1024px', margin: '0 auto'}}>
-                    <h1><img src={logo} style={{margin: '0 auto'}} /></h1>
+                    <h1>
+                        <img src={logo} style={{margin: '0 auto', cursor: 'pointer'}} onClick={this.gotoMain}/>
+                    </h1>
                     </div>
                     <div className="container" style={{width: '1024px'}}>
                         <div className="content" style={{width: '720px', margin: '0 auto', paddingBottom: '120px'}}>
