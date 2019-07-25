@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import ReactDOM from 'react-dom';
 import "../assets/bootstrap/css/bootstrap.min.css";
 import "../assets/css/styles.css";
 import logo from "../assets/img/logo3.png"
@@ -23,7 +22,6 @@ class Login extends Component {
         let inputId = e.target.id;
         let inputData = e.target.value;
         let labelId;
-        let that = this;
         
         new Promise(function(resolve, reject) {
             if (inputId === "id") {
@@ -54,7 +52,7 @@ class Login extends Component {
                 <div className="wrap">
                     <div className="header" style={{paddingTop: '132px', width: '1024px', margin: '0 auto'}}>
                     <h1>
-                        <img src={logo} style={{margin: '0 auto', cursor: 'pointer'}} onClick={this.gotoMain}/>
+                        <img src={logo} style={{margin: '0 auto', cursor: 'pointer', display: "-webkit-box"}} onClick={this.gotoMain}/>
                     </h1>
                     </div>
                     <div className="container" style={{width: '1024px'}}>
@@ -63,16 +61,16 @@ class Login extends Component {
                                 <fieldset className="login_form">
                                     <legend className="blind" />
                                     <div className="id_area">
-                                        <div className="border rounded-0 input-row" id="id-area" style={{height: '50px', marginBottom: '14px', paddingTop: '10px', paddingRight: '35px', paddingBottom: '10px', paddingLeft: '15px'}}>
+                                        <div className="border rounded-0 input-row" id="id-area" style={{position: 'relative', height: '50px', marginBottom: '14px', paddingTop: '10px', paddingRight: '35px', paddingBottom: '10px', paddingLeft: '10px'}}>
                                             <span className="input-box">
-                                                <label id="label_id-area" className="label">ID</label>
-                                                <input className="form-control" autoComplete="off" refs="id" type="text" id="id" onChange={this.showLabel} autoFocus style={{paddingTop: '0px', paddingRight: '0px', paddingBottom: '3px', paddingLeft: '0px'}} />
+                                                <label id="label_id-area" className="label" style={{color: 'grey', position: 'absolute'}}>ID</label>
+                                                <input className="form-control" autoComplete="off" refs="id" type="text" id="id" onChange={this.showLabel} autoFocus style={{border: '0px', position: 'initial', paddingTop: '0px', paddingRight: '0px', paddingBottom: '.75rem', paddingLeft: '0px'}} />
                                             </span>
                                         </div>
-                                        <div className="border rounded-0 input-row" id="password-area" style={{height: '50px', marginBottom: '14px', paddingTop: '10px', paddingRight: '35px', paddingBottom: '10px', paddingLeft: '15px'}}>
+                                        <div className="border rounded-0 input-row" id="password-area" style={{position: 'relative', height: '50px', marginBottom: '14px', paddingTop: '10px', paddingRight: '35px', paddingBottom: '10px', paddingLeft: '10px'}}>
                                             <span className="input-box">
-                                                <label id="label_password-area" className="label">password</label>
-                                                <input className="form-control" refs="password" type="password" id="password" onChange={this.showLabel} style={{paddingTop: '0px', paddingRight: '0px', paddingBottom: '3px', paddingLeft: '0px'}} />
+                                                <label id="label_password-area" className="label" style={{color: 'grey', position: 'absolute'}}>PASSWORD</label>
+                                                <input className="form-control" refs="password" type="password" id="password" onChange={this.showLabel} style={{border: '0px', position: 'initial', paddingTop: '0px', paddingRight: '0px', paddingBottom: '.75rem', paddingLeft: '0px'}} />
                                             </span>
                                         </div>
                                     </div>
