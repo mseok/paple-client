@@ -12,14 +12,28 @@ export const AUTHENTICATION = gql`
 `
 
 export const AUTHENTICATION_MUTATION = gql`
-    mutation authentication($email: String!, $password: String!, $name: String!){
+    mutation authentication($email: String!, $password: String!, $name: String!) {
         authentication {
             register(email: $email, password: $password, name: $name) {
-                jwt
                 responseResult {
                     succeeded
                     errorCode
                 }
+                jwt
+            }
+        }
+    }
+`
+
+export const LOGIN_MUTATION = gql`
+    mutation authentication($username: String!, $password: String!, $strategy: String!) {
+        authentication {
+            login(username: $username, password: $password, strategy: $strategy) {
+                responseResult {
+                    succeeded
+                    errorCode
+                }
+                jwt
             }
         }
     }

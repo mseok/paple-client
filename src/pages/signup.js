@@ -20,6 +20,22 @@ class Signup extends Component {
     gotoMain = e => {
         window.location.pathname = "/"
     }
+
+
+    // _confirm = async data => {
+    //     const { token } = data.authentication.register.jwt
+    //     this._saveUserData(token);
+    // }
+
+    
+    // _saveUserData = async token => {
+    //     try {
+    //         await AsyncStorage.setItem(AUTH_TOKEN, token);
+    //     } catch(e) {
+    //         console.log("Error: ", e)
+    //     }
+    // }
+
     
     render() {
         const { email, password, name, confirmpw } = this.state;
@@ -32,7 +48,7 @@ class Signup extends Component {
                 <div className="main">
                     <section className="signup">
                     <div className="border rounded-0 container-box" style={{width: '840px', margin: '0 auto', padding: '40px 60px', backgroundColor: 'white', marginTop: '100px'}}>
-                    <Mutation mutation={AUTHENTICATION_MUTATION}>
+                    <Mutation mutation={AUTHENTICATION_MUTATION} onCompleted={data =>this._confirm(data)}>
                         {mutate => (
                             <div className="container" style={{width: '100%', margin: 0, position: 'relative'}}>
                                 <div className="signup-content"> 
@@ -89,7 +105,8 @@ class Signup extends Component {
                                                     const response = await mutate({
                                                         variables: this.state
                                                     })
-                                                    console.log(response);
+                                                    console.log(response.data.authentication);
+
                                                 }}>
                                                     Sign Up
                                             </button>

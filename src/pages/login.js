@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Mutation } from 'react-apollo';
+import { LOGIN_MUTATION } from '../queries';
 import "../assets/bootstrap/css/bootstrap.min.css";
 import "../assets/css/styles.css";
 import logo from "../assets/img/logo3.png"
@@ -7,10 +9,11 @@ class Login extends Component {
     
     constructor(props) {
         super(props);
-        this.showLabel = this.showLabel.bind(this);
         this.state = {
-            idData: "",
-            pwData: "",
+            email: "",
+            username: "",
+            password: "",
+            strategy: "",
         }
     }
 
@@ -18,29 +21,8 @@ class Login extends Component {
         window.location.pathname = "/"
     }
 
-    showLabel = e => {
-        let inputId = e.target.id;
-        let inputData = e.target.value;
-        let labelId;
-        
-        new Promise(function(resolve, reject) {
-            if (inputId === "id") {
-                labelId = "label_id-area"
-                resolve()
-            } else if (inputId === "password") {
-                labelId = "label_password-area"
-                resolve()
-            }
-        }).then(function() {
-            if (inputData !== "") {
-                window.document.getElementById(labelId).style.display = "none";
-            } else {
-                window.document.getElementById(labelId).style.display = "block";
-            }
-        })
-    }
-
     render() {
+        const { email, username, password, strategy } = this.state;
         return (
             <div>
                 <meta charSet="utf-8" />
@@ -57,26 +39,55 @@ class Login extends Component {
                     </div>
                     <div className="container" style={{width: '1024px'}}>
                         <div className="content" style={{width: '720px', margin: '0 auto', paddingBottom: '120px'}}>
-                            <form id="login">
-                                <fieldset className="login_form">
-                                    <legend className="blind" />
-                                    <div className="id_area">
-                                        <div className="border rounded-0 input-row" id="id-area" style={{position: 'relative', height: '50px', marginBottom: '14px', paddingTop: '10px', paddingRight: '35px', paddingBottom: '10px', paddingLeft: '10px'}}>
-                                            <span className="input-box">
-                                                <label id="label_id-area" className="label" style={{color: 'grey', position: 'absolute'}}>ID</label>
-                                                <input className="form-control" autoComplete="off" refs="id" type="text" id="id" onChange={this.showLabel} autoFocus style={{border: '0px', position: 'initial', paddingTop: '0px', paddingRight: '0px', paddingBottom: '.75rem', paddingLeft: '0px'}} />
-                                            </span>
+                            <Mutation mutation={LOGIN_MUTATION}>
+                                {mutate => (
+                                <form id="login">
+                                    <fieldset className="login_form">
+                                        <legend className="blind" />
+                                        <div className="id_area">
+                                            <div className="border rounded-0 input-row" id="id-area" style={{height: '50px', marginBottom: '14px', paddingTop: '5px', paddingRight: '35px', paddingBottom: '10px', paddingLeft: '10px'}}>
+                                                <input
+                                                    className="form-control"
+                                                    autoComplete="off"
+                                                    refs="id"
+                                                    type="text"
+                                                    id="id"
+                                                    placeholder="Your Email"
+                                                    onChange={ e => this.setState({email: e.target.value})}
+                                                    autoFocus
+                                                    style={{border: '0px', paddingTop: '0px', paddingRight: '0px', paddingBottom: '5px', paddingLeft: '0px'}}
+                                                />
+                                            </div>
+                                            <div className="border rounded-0 input-row" id="password-area" style={{height: '50px', marginBottom: '14px', paddingTop: '5px', paddingRight: '35px', paddingBottom: '10px', paddingLeft: '10px'}}>
+                                                <input
+                                                    className="form-control"
+                                                    refs="password"
+                                                    type="password"
+                                                    id="password"
+                                                    placeholder="Your Password"
+                                                    onChange={ e => this.setState({email: e.target.value})}
+                                                    style={{border: '0px', paddingTop: '0px', paddingRight: '0px', paddingBottom: '5px', paddingLeft: '0px'}}
+                                                />
+                                            </div>
                                         </div>
-                                        <div className="border rounded-0 input-row" id="password-area" style={{position: 'relative', height: '50px', marginBottom: '14px', paddingTop: '10px', paddingRight: '35px', paddingBottom: '10px', paddingLeft: '10px'}}>
-                                            <span className="input-box">
-                                                <label id="label_password-area" className="label" style={{color: 'grey', position: 'absolute'}}>PASSWORD</label>
-                                                <input className="form-control" refs="password" type="password" id="password" onChange={this.showLabel} style={{border: '0px', position: 'initial', paddingTop: '0px', paddingRight: '0px', paddingBottom: '.75rem', paddingLeft: '0px'}} />
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <button className="btn btn-primary" type="button" style={{width: '100%', marginTop: '30px', marginBottom: '50px', height: '70px', fontFamily: '"Nanum Gothic", sans-serif', fontSize: '25px', letterSpacing: '2px', backgroundColor: '#8D4B4B', borderColor: '#8D4B4B'}}>로그인</button>
-                                </fieldset>
-                            </form>
+                                        <button
+                                            className="btn btn-primary"
+                                            type="button"
+                                            onClick={async () => {
+                                                const response = await mutate({
+                                                    variables: { username, password, strategy }
+                                                })
+                                                console.log(response.data.authentication.login);
+                                            }}
+                                            style={{width: '100%', marginTop: '30px', marginBottom: '50px', height: '70px', fontFamily: '"Nanum Gothic", sans-serif', fontSize: '25px', letterSpacing: '2px', backgroundColor: '#8D4B4B', borderColor: '#8D4B4B'}}
+                                        >
+                                            로그인
+                                        </button>
+                                    </fieldset>
+                                </form>
+                                )}
+
+                            </Mutation>
                         </div>
                     </div>
                 </div>
