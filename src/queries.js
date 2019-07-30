@@ -13,11 +13,13 @@ export const AUTHENTICATION = gql`
 
 export const AUTHENTICATION_MUTATION = gql`
     mutation authentication($email: String!, $password: String!, $name: String!){
-        register(email: $email, password: $password, name: $name) {
-            jwt
-            responseResult {
-                succeeded
-                errorCode
+        authentication {
+            register(email: $email, password: $password, name: $name) {
+                jwt
+                responseResult {
+                    succeeded
+                    errorCode
+                }
             }
         }
     }
