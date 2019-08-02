@@ -38,7 +38,6 @@ class Signup extends Component {
 
     
     render() {
-        const { email, password, name, confirmpw } = this.state;
         return (
             <div>
                 <meta charSet="utf-8" />
@@ -48,7 +47,7 @@ class Signup extends Component {
                 <div className="main">
                     <section className="signup">
                     <div className="border rounded-0 container-box" style={{width: '840px', margin: '0 auto', padding: '40px 60px', backgroundColor: 'white', marginTop: '100px'}}>
-                    <Mutation mutation={AUTHENTICATION_MUTATION} onCompleted={data =>this._confirm(data)}>
+                    <Mutation mutation={AUTHENTICATION_MUTATION}>
                         {mutate => (
                             <div className="container" style={{width: '100%', margin: 0, position: 'relative'}}>
                                 <div className="signup-content"> 
@@ -106,7 +105,6 @@ class Signup extends Component {
                                                         variables: this.state
                                                     })
                                                     console.log(response.data.authentication);
-
                                                 }}>
                                                     Sign Up
                                             </button>

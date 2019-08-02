@@ -18,6 +18,7 @@ export const AUTHENTICATION_MUTATION = gql`
                 responseResult {
                     succeeded
                     errorCode
+                    message
                 }
                 jwt
             }
@@ -32,6 +33,7 @@ export const LOGIN_MUTATION = gql`
                 responseResult {
                     succeeded
                     errorCode
+                    message
                 }
                 jwt
             }
