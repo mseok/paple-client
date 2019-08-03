@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Cookies from 'js-cookie';
+import jwt from 'jsonwebtoken';
 import { Query, Mutation } from 'react-apollo';
 import { AUTHENTICATION, AUTHENTICATION_MUTATION } from './queries';
 
@@ -15,56 +17,31 @@ class Test extends Component {
             [name]: value
         })
     }
+
+    handleClick = e => {
+        const jwtCookie = Cookies.get('jwt')
+        if (jwtCookie) {
+            try {
+                const jwtData = jwt.decode(jwtCookie)
+                console.log(jwtData)
+            } catch (err) {
+                console.debug('Invalid JWT. Silent authentication skipped.')
+            }
+        }
+    }
     
     render() {
-        const { email, password, name } = this.state;
         return (
-            <div>
-                <Mutation mutation={AUTHENTICATION_MUTATION}>
-                {mutate => (
-                    <div>
-                        {/* Send data to server with graphql */}
-                        <input
-                            type="text"
-                            name="email"
-                            value={email}
-                            onChange={this.handleChange}
-                            placeholder="email"
-                        >
-                        </input>
-                        <input
-                            type="password"
-                            name="password"
-                            value={password}
-                            onChange={this.handleChange}
-                            placeholder="password"
-                        >
-                        </input>
-                        <input
-                            type="text"
-                            name="name"
-                            value={name}
-                            onChange={this.handleChange}
-                            placeholder="name"
-                        >
-                        </input>
-                        <button onClick={async () => {
-                            const response = await mutate({
-                                variables: this.state
-                            })
-                            console.log(response);
-                        }}>register</button>
-                    </div>
-                    )}
-                </Mutation>
-                <Query query={AUTHENTICATION}>
-                {({ loading, data, error }) => {
-                    if (loading) return "loading"
-                    if (error) return "something happened"
-                    return data.authentication.strategies.map(auth => <h2>{auth.description}</h2>)
-                }}
-                </Query>
+            <div onClick={this.handleClick}>
+                Shit
             </div>
+                // <Query query={AUTHENTICATION}>
+                // {({ loading, data, error }) => {
+                //     if (loading) return "loading"
+                //     if (error) return "something happened"
+                //     return data.authentication.strategies.map(auth => <h2>{auth.description}</h2>)
+                // }}
+                // </Query>
         )
     }
 }

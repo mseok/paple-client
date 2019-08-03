@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
 import { LOGIN_MUTATION } from '../queries';
-import _ from 'lodash'
+import Cookies from 'js-cookie';
+import _ from 'lodash';
 import "../assets/bootstrap/css/bootstrap.min.css";
 import "../assets/css/styles.css";
-import logo from "../assets/img/logo3.png"
+import logo from "../assets/img/logo3.png";
 
 class Login extends Component {
     
@@ -82,10 +83,13 @@ class Login extends Component {
                                                 const response = await mutate({
                                                     variables: { username, password, strategy }
                                                 })
+                                                console.log(response.data.authentication)
                                                 if (_.has(response, 'data.authentication.login')) {
                                                     let respObj = _.get(response, 'data.authentication.login', {})
-                                                    console.log(respObj)
                                                     if (respObj.responseResult.succeeded === true) {
+                                                        Cookies.set('jwt', respObj.jwt, { expires: 365 })
+                                                        // localStorage.setItem('token', respObj.jwt)
+                                                        
                                                         // _.delay(() => {
                                                         //     window.location.replace('/')
                                                         // }, 1000)
