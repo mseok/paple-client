@@ -5,9 +5,6 @@ const client = new ApolloClient({
     link: new HttpLink({
         uri : "http://localhost:3000/graphql",
         connectToDevTools: true,
-        // fetchOptions: {
-        //     credentials: "include"
-        // },
         request: async (operation) => {
             const token = Cookies.get('token');
             operation.setContext({
@@ -16,16 +13,7 @@ const client = new ApolloClient({
                 }
             })
         }
-        // includeExtensions: true,
     }),
-    // request: async operation => {
-    //     const token = localStorage.getItem('token');
-    //     operation.setContext({
-    //       headers: {
-    //         authorization: token ? `Bearer ${token}` : ''
-    //       }
-    //     });
-    // },
     cache: new InMemoryCache()
 });
 

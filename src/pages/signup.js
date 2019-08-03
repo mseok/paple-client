@@ -1,40 +1,29 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
 import { AUTHENTICATION_MUTATION } from '../queries';
+import Cookies from 'js-cookie';
+import _ from 'lodash';
 import "../assets/bootstrap/css/bootstrap.min.css";
 import "../assets/css/styles.css"
+
+const initialState = {
+    email: "",
+    password: "",
+    name: "",
+    confirmpw: "",
+}
 
 class Signup extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            email: "",
-            password: "",
-            name: "",
-            confirmpw: "",
-        }
+        this.state = {initialState}
     }
 
 
     gotoMain = e => {
         window.location.pathname = "/"
     }
-
-
-    // _confirm = async data => {
-    //     const { token } = data.authentication.register.jwt
-    //     this._saveUserData(token);
-    // }
-
-    
-    // _saveUserData = async token => {
-    //     try {
-    //         await AsyncStorage.setItem(AUTH_TOKEN, token);
-    //     } catch(e) {
-    //         console.log("Error: ", e)
-    //     }
-    // }
 
     
     render() {
@@ -101,10 +90,38 @@ class Signup extends Component {
                                                 type="button"
                                                 style={{width: '100%', padding: 0, height: '60px', backgroundColor: '#8D4B4B', borderColor: '#8D4B4B'}}
                                                 onClick={async () => {
-                                                    const response = await mutate({
-                                                        variables: this.state
-                                                    })
-                                                    console.log(response.data.authentication);
+                                                    let that = this;
+                                                    return new Promise( async (resolve, reject) => {
+                                                        let currentState = this.state;
+                                                        // for (var [key, value] of Object.entries(currentState)) {
+                                                        //     if (initialState.key === value) {
+                                                        //         reject()
+                                                        //     }
+                                                        // }
+                                                        if (currentState.email !== initialState.email &&
+                                                            currentState.password !== initialState.password &&
+                                                            currentState.name !== initialState.name &&
+                                                            currentState.confirmpw !== initialState.confirmpw) {
+                                                                resolve()
+                                                            }
+                                                    }).then( async function() {
+                                                        const response = await mutate({
+                                                            variables: that.state
+                                                        })
+                                                        console.log(response.data.authentication);
+                                                        if (_.has(response, 'data.authentication.register')) {
+                                                            let respObj = _.get(response, 'data.authentication.register', {})
+                                                            if (respObj.responseResult.succeeded === true) {
+                                                                Cookies.set('jwt', respObj.jwt, { expires: 365 })                                                        
+                                                                _.delay(() => {
+                                                                    window.location.replace('/')
+                                                                }, 1000)
+                                                                return true
+                                                            } else {
+                                                                throw new Error(respObj.responseResult.message)
+                                                            }
+                                                        }
+                                                    }) 
                                                 }}>
                                                     Sign Up
                                             </button>

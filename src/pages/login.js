@@ -87,12 +87,10 @@ class Login extends Component {
                                                 if (_.has(response, 'data.authentication.login')) {
                                                     let respObj = _.get(response, 'data.authentication.login', {})
                                                     if (respObj.responseResult.succeeded === true) {
-                                                        Cookies.set('jwt', respObj.jwt, { expires: 365 })
-                                                        // localStorage.setItem('token', respObj.jwt)
-                                                        
-                                                        // _.delay(() => {
-                                                        //     window.location.replace('/')
-                                                        // }, 1000)
+                                                        Cookies.set('jwt', respObj.jwt, { expires: 365 })                                                        
+                                                        _.delay(() => {
+                                                            window.location.replace('/')
+                                                        }, 1000)
                                                         return true
                                                     } else {
                                                         throw new Error(respObj.responseResult.message)

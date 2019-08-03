@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 import Cookies from 'js-cookie';
 import jwt from 'jsonwebtoken';
 import { Query, Mutation } from 'react-apollo';
@@ -18,15 +19,22 @@ class Test extends Component {
         })
     }
 
-    handleClick = e => {
-        const jwtCookie = Cookies.get('jwt')
-        if (jwtCookie) {
-            try {
-                const jwtData = jwt.decode(jwtCookie)
-                console.log(jwtData)
-            } catch (err) {
-                console.debug('Invalid JWT. Silent authentication skipped.')
-            }
+    handleClick = async e => {
+        // const jwtCookie = Cookies.get('jwt')
+        // if (jwtCookie) {
+        //     try {
+        //         const jwtData = jwt.decode(jwtCookie)
+        //         console.log(jwtData)
+        //     } catch (err) {
+        //         console.debug('Invalid JWT. Silent authentication skipped.')
+        //     }
+        // }
+        const ab = {
+            "a" : 1,
+            "b" : 2
+        }
+        for (var [key, value] of Object.entries(ab)) {
+            console.log(key, value)
         }
     }
     

@@ -37,3 +37,16 @@
   color: #611427;
 }
 
+#button-signout {
+  background-color: #FFFFFF;
+  color: #611427;
+}
+
+#noti {
+  float: right;
+}
+
+.rounded-circle.border.profile {
+  float: right;
+}
+
