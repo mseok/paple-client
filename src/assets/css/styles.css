@@ -1,3 +1,73 @@
+.site-header {
+  border-bottom: 1px solid;
+  border-color: #0a0a0a;
+  margin: 1em;
+  padding: 1em;
+}
+
+.container {
+}
+
+img ::before {
+  content: '';
+  display: inline-block;
+  vertical-align: middle;
+  height: 100%;
+}
+
+.fa.fa-bell-o {
+  float: right;
+}
+
+.Thumbnail {
+  float: right;
+}
+
+.clearfix ::before {
+  content: '';
+  display: table;
+}
+
+.clearfix ::after {
+  clear: both;
+}
+
+.post-header {
+  display: block;
+}
+
+.edittime {
+  float: right;
+}
+
+.blockquote ::before {
+  content: '\201C';
+  font-size: 120px;
+  color: #0a0a0a;
+  position: absolute;
+  left: -50px;
+  top: -50px;
+}
+
+.blockquote {
+  display: block;
+  /*margin: 0;*/
+  position: relative;
+  border: 1px solid #0a0a0a;
+}
+
+.blockquote ::after {
+  content: '';
+}
+
+.lead {
+  line-height: 1.7em;
+  font-size: 2em;
+  font-family: Lora, serif;
+  width: 33em;
+  margin-left: 240px;
+}
+
 .image-box {
   /*float: left;*/
   height: 100vh;

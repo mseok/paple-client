@@ -93,11 +93,6 @@ class Signup extends Component {
                                                     let that = this;
                                                     return new Promise( async (resolve, reject) => {
                                                         let currentState = this.state;
-                                                        // for (var [key, value] of Object.entries(currentState)) {
-                                                        //     if (initialState.key === value) {
-                                                        //         reject()
-                                                        //     }
-                                                        // }
                                                         if (currentState.email !== initialState.email &&
                                                             currentState.password !== initialState.password &&
                                                             currentState.name !== initialState.name &&

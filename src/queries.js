@@ -40,3 +40,65 @@ export const LOGIN_MUTATION = gql`
         }
     }
 `
+
+export const PAGE_QUERY = gql`
+    query Page($pageId: Int!) {
+        pages {
+            single(id: $pageId) {
+                id
+                title
+                content
+            }
+        }
+    }
+`
+
+export const PAGE_LIST_QUERY = gql`
+    query pageList{
+        pages {
+            list {
+                id
+                title
+            }
+        }
+    }
+`
+// export const PAGE_QUERY = gql`
+//     {
+//         pages {
+//             single (id: 7) {
+//                 id
+//                 title
+//                 content
+//             }
+//         }
+//     }
+// `
+
+
+export const PAGE_MUTATION = gql`
+    mutation page(
+        $content: String!,
+        $description: String!,
+        $editor: String!
+        $locale: String!
+        $path: String!
+        $title: String!
+    ) {
+        page {
+            create(
+                content: $content,
+                description: $description,
+                editor: $editor,
+                locale: $locale,
+                path: $path,
+                title: $title
+            ) {
+                responseResult {
+                    succeeded
+                }
+                page
+            }
+        }
+    }
+`

@@ -15,6 +15,7 @@ const initialState = {
   username: "",
   email: "",
   id: 0,
+  search: "",
 }
 
 class App extends Component {
@@ -52,6 +53,13 @@ class App extends Component {
     window.location.pathname = "/signup"
   }
 
+  gotoSearch = e => {
+    const search = this.state.search;
+    if (search !== "") {
+      window.location.pathname = `/search/${search}`
+    }
+  }
+
   handleLogout = e => {
     Cookies.set('jwt', null)
     window.location.reload()
@@ -83,7 +91,20 @@ class App extends Component {
               </div>
               )}
             <div className="logobox" style={{margin: '0 auto', width: '18.2vw'}}><img src={logo} style={{width: '100%'}} /></div>
-            <div className="d-flex justify-content-center searchbox"><i className="fa fa-search" /><input type="search" style={{width: '41.67vw', marginLeft: '15px', paddingTop: '10px'}} /></div>
+            <div className="d-flex justify-content-center searchbox">
+              <input
+                type="search"
+                style={{width: '41.67vw', marginLeft: '15px', marginRight: '10px', fontSize: '20px'}}
+                onChange={ e => this.setState({search: e.target.value}) }
+                onKeyUp={ e => {if (e.keyCode === 13) {window.document.getElementById('search-icon').click()}} }
+              />
+              <i
+                id="search-icon"
+                style={{cursor: 'pointer'}}
+                className="fa fa-search"
+                onClick={this.gotoSearch}
+              />
+            </div>
           </div>
           <div className="image-box"><img id="main-image" src={mainLeftCut} /></div>
         </div>
