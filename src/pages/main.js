@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Query } from 'react-apollo';
+import { Query, Mutation } from 'react-apollo';
+import ReactHtmlParser from 'react-html-parser'; 
 import { PAGE_QUERY } from '../queries';
 import Cookies from 'js-cookie';
 import jwt from 'jsonwebtoken';
@@ -137,23 +138,14 @@ class Main extends Component {
                             </div>
                             <div className="tldr">
                                 <ul className="tldr-content">
-                                <li className="tldr-content-listitem">You can use a comma-separated list to apply styles when the user's device matches any one of various media types, features, or states.<br /></li>
-                                <li className="tldr-content-listitem">For instance, the following rule will apply its styles if the user's device has either a minimum height of 680px <em>or</em> is a screen device in portrait mode:<br /></li>
-                                <li className="tldr-content-listitem">Taking the above example, if the user had a printer with a page <br />height of 800px, the media statement would return true because the first query would apply. Likewise, if the user were on a smartphone in portrait mode with a viewport
-                                    height of 480px, the second query would apply and the media statement would still return true.<br /></li>
+                                <li className="tldr-content-listitem">{page.description}<br /></li>
                                 </ul>
                             </div>
                             <div className="post-wrapper">
                                 <header style={{fontSize: '7em', fontFamily: '"Poiret One", cursive', letterSpacing: '-4px', marginTop: '70px'}}>
-                                <p className="d-xl-flex" style={{fontFamily: '"Poiret One", cursive', color: 'rgba(141,75,75,0.55)'}}>0. Abstract</p>
                                 </header>
                                 <article className="post-content">
-                                <p className="lead"><br />{page.content}<br /></p>
-                                <blockquote className="blockquote" style={{paddingTop: '1em', paddingRight: '4em', paddingBottom: '1em', paddingLeft: '4em', marginLeft: '250px', marginRight: '550px', marginTop: '2em', marginBottom: '2em'}}>
-                                    <p className="blockquote-paragraph" style={{fontFamily: 'Montserrat, sans-serif', fontSize: '2em'}}>you can add this quotes as just one click with just a simple method. Though it could be worse, you are gonna be alright.</p>
-                                    <footer className="blockquote-footer d-xl-flex justify-content-xl-end" style={{fontFamily: 'Montserrat, sans-serif'}}>Someone famous</footer>
-                                </blockquote>
-                                <p className="lead">{page.content}</p>
+                                <div> { ReactHtmlParser (page.render) } </div>
                                 </article>
                             </div>
                         </div>
