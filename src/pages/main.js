@@ -27,7 +27,7 @@ class Main extends Component {
     }
 
     componentWillMount() {
-        const jwtCookie = Cookies.get('jwt')
+        const jwtCookie = Cookies.get('jwt');
         if (jwtCookie) {
             try {
                 const jwtData = jwt.decode(jwtCookie)

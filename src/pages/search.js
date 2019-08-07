@@ -56,8 +56,10 @@ class Search extends Component {
     }
 
     gotoLogin = e => {
-        this.props.history.push(window.location.pathname)
-        window.location.pathname = "/login"
+        console.log(this.props)
+        if (!this.state.login) {
+            window.location.replace('/login')
+        }
     }
 
     gotoSignup = e => {
