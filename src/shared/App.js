@@ -12,9 +12,9 @@ import logo from "../assets/img/logo3.png";
 
 const initialState = {
   logIn: false,
-  username: "",
+  userName: "",
   email: "",
-  id: 0,
+  userId: 0,
   search: "",
 }
 
@@ -32,9 +32,9 @@ class App extends Component {
         if (jwtData) {
           this.setState({
             logIn: true,
-            username: jwtData.name,
+            userName: jwtData.name,
             email: jwtData.email,
-            id: jwtData.id,
+            userId: jwtData.id,
           })
         } else {
           this.setState(initialState)
@@ -76,7 +76,7 @@ class App extends Component {
               {this.state.logIn ? 
               (
               <div className="button-box" style={{height: '26.4vh', paddingTop: '1.39vh'}}>
-                <img className="rounded-circle border border-dark profile" src={facered} style={{height: '60px'}} />
+                <img className="rounded-circle border border-dark profile" alt="userimg" src={facered} style={{height: '60px'}} />
                 <i className="fa fa-bell-o" id="noti" style={{fontSize: '35px', padding: '0 30px', marginTop: '15px'}} />
                 <div className="btn-group" role="group" style={{marginTop: '15px'}}>
                  <button className="btn btn-primary" id="button-signout" type="button" onClick={this.handleLogout}>로그아웃</button>
@@ -90,7 +90,7 @@ class App extends Component {
                 </div>
               </div>
               )}
-            <div className="logobox" style={{margin: '0 auto', width: '18.2vw'}}><img src={logo} style={{width: '100%'}} /></div>
+            <div className="logobox" style={{margin: '0 auto', width: '18.2vw'}}><img src={logo} alt="logo" style={{width: '100%'}} /></div>
             <div className="d-flex justify-content-center searchbox">
               <input
                 type="search"
@@ -106,7 +106,7 @@ class App extends Component {
               />
             </div>
           </div>
-          <div className="image-box"><img id="main-image" src={mainLeftCut} /></div>
+          <div className="image-box"><img id="main-image" alt="mainimage" src={mainLeftCut} /></div>
         </div>
       </div>
     )
