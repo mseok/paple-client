@@ -1,22 +1,48 @@
 import React, { Component } from 'react';
-import { Query, Mutation } from 'react-apollo';
-import { PAGE_QUERY, PAGE_LIST_QUERY } from '../queries';
+import { Query } from 'react-apollo';
+import { PAGE_LIST_QUERY } from '../queries';
 import Cookies from 'js-cookie';
+import jwt from 'jsonwebtoken';
 import facered from "../assets/img/facered.png";
-import authorbox from "../assets/img/authorbox.png";
 import logo3_editted_cut from "../assets/img/logo3_editted_cut.svg";
-import _ from 'lodash';
 import "../assets/bootstrap/css/bootstrap.min.css";
 import "../assets/fonts/font-awesome.min.css";
 import "../assets/css/styles.css";
-import "../assets/css/untitled.css"
-import { arrayExpression } from '@babel/types';
+import "../assets/css/untitled.css";
+
+
+const initialState = {
+    logIn: false,
+    userName: "",
+    email: "",
+    userId: 0,
+    search: "",
+}
 
 class Search extends Component {
     constructor(props) {
         super(props)
-        this.state = {
-            search: "",
+        this.state = {initialState}
+    }
+
+    componentWillMount() {
+        const jwtCookie = Cookies.get('jwt')
+        if (jwtCookie) {
+            try {
+                const jwtData = jwt.decode(jwtCookie)
+                if (jwtData) {
+                this.setState({
+                    logIn: true,
+                    userName: jwtData.name,
+                    email: jwtData.email,
+                    userId: jwtData.id,
+                })
+                } else {
+                this.setState(initialState)
+                }
+            } catch (err) {
+                console.debug('Invalid JWT. Silent authentication skipped.')
+            }
         }
     }
 
@@ -27,6 +53,15 @@ class Search extends Component {
         }).then(function(pageId) {
             window.location.pathname = `main/${pageId}`
         })
+    }
+
+    gotoLogin = e => {
+        this.props.history.push(window.location.pathname)
+        window.location.pathname = "/login"
+    }
+
+    gotoSignup = e => {
+        window.location.pathname = "/signup"
     }
 
     gotoSearch = e => {
@@ -40,6 +75,11 @@ class Search extends Component {
         window.location.pathname = "/"
     }
 
+    handleLogout = e => {
+        Cookies.set('jwt', null)
+        window.location.reload()
+    }
+
     render() {
         return(
             <div>
@@ -48,15 +88,32 @@ class Search extends Component {
                 <title>viewpage_real</title>
                 <header className="site-header" style={{minWidth: '1240px', position: 'sticky', top: '0px', background: 'white'}}>
                     <div className="container" style={{maxWidth: '1750px', margin: '0 auto', paddingBottom: '20px'}}>
-                        <img src={logo3_editted_cut} onClick={this.gotoHome} style={{cursor: 'pointer', width: '8em', marginRight: '10em', paddingBottom: '0px'}} />
+                        <img src={logo3_editted_cut} alt="logo" onClick={this.gotoHome} style={{cursor: 'pointer', width: '8em', marginRight: '10em', paddingBottom: '0px'}} />
                         <input
                             className="form-control-lg"
                             type="text"
-                            style={{width: '55vw', paddingTop: '8px', zIndex: 13, height: '50px', marginLeft: '15px', marginRight: '10px'}}
+                            style={{width: '53vw', paddingTop: '8px', zIndex: 13, height: '50px', marginLeft: '15px', marginRight: '10px'}}
                             onChange={ e => this.setState({search: e.target.value}) }
                             onKeyUp={ e => {if (e.keyCode === 13) {window.document.getElementById('search-icon').click()}} }/>
-                        <i id="search-icon" style={{cursor: 'pointer'}} className="fa fa-search" onClick={this.gotoSearch} />
-                        <img className="rounded-circle border border-dark Thumbnail" src={facered} style={{height: '80px'}} />
+                        <i
+                            id="search-icon"
+                            style={{cursor: 'pointer'}}
+                            className="fa fa-search"
+                            onClick={this.gotoSearch}
+                        />
+                        {this.state.logIn ? 
+                        (   
+                            <div className="btn-group" role="group" style={{marginTop: '5px', width: '250px'}}>
+                                <button className="btn btn-primary" id="button-signout" type="button" style={{borderRadius: '.25rem', margin: '15px', height: '38px'}} onClick={this.handleLogout}>로그아웃</button>
+                                <i className="fa fa-bell-o" id="noti" style={{fontSize: '35px', padding: '0 5px', marginTop: '15px', marginRight: '15px'}} />
+                                <img className="rounded-circle border border-dark profile" alt="userimg" src={facered} style={{height: '60px'}} />
+                            </div>
+                        ) : (
+                            <div className="btn-group" role="group" style={{marginTop: '20px'}}>
+                                <button className="btn btn-primary" id="button-signup" type="button" onClick={this.gotoSignup}>회원가입</button>
+                                <button className="btn btn-primary" id="button-signin" type="button" onClick={this.gotoLogin}>로그인</button>
+                            </div>
+                        )}
                     </div>
                     <div className="clearfix" />
                 </header>
