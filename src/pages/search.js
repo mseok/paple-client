@@ -29,6 +29,13 @@ class Search extends Component {
         })
     }
 
+    gotoSearch = e => {
+        const search = this.state.search;
+        if (search !== "") {
+          window.location.pathname = `/search/${search}`
+        }
+    }
+
     gotoHome = e => {
         window.location.pathname = "/"
     }
@@ -48,9 +55,8 @@ class Search extends Component {
                             style={{width: '55vw', paddingTop: '8px', zIndex: 13, height: '50px', marginLeft: '15px', marginRight: '10px'}}
                             onChange={ e => this.setState({search: e.target.value}) }
                             onKeyUp={ e => {if (e.keyCode === 13) {window.document.getElementById('search-icon').click()}} }/>
-                        <i id="search-icon" style={{cursor: 'pointer'}} className="fa fa-search" onClick={this.gotoPage} />
+                        <i id="search-icon" style={{cursor: 'pointer'}} className="fa fa-search" onClick={this.gotoSearch} />
                         <img className="rounded-circle border border-dark Thumbnail" src={facered} style={{height: '80px'}} />
-                        <i id="search-icon" style={{cursor: 'pointer'}} className="fa fa-search" onClick={this.gotoPage} />
                     </div>
                     <div className="clearfix" />
                 </header>

@@ -38,6 +38,8 @@ img ::before {
 
 .edittime {
   float: right;
+  /*position: absolute;*/
+  /*right: 20vw;*/
 }
 
 .blockquote ::before {
@@ -65,7 +67,22 @@ img ::before {
   font-size: 2em;
   font-family: Lora, serif;
   width: 33em;
-  margin-left: 240px;
+  margin-left: 12.5vw;
+}
+
+.tldr-content {
+  font-family: 'Montserrat';
+  font-size: 2em;
+  margin: 0 12.5vw;
+  margin-top: 100px;
+  border-color: #0a0a0a;
+  border: groove;
+  padding: 40px;
+  padding-left: 2em;
+}
+
+.tldr-content-listitem {
+  margin-bottom: 0.7em;
 }
 
 .image-box {
@@ -119,4 +136,5 @@ img ::before {
 .rounded-circle.border.profile {
   float: right;
 }
+
 
