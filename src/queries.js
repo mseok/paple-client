@@ -46,8 +46,9 @@ export const PAGE_QUERY = gql`
         pages {
             single(id: $pageId) {
                 id
+                description
                 title
-                content
+                render
             }
         }
     }
