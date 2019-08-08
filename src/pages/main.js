@@ -18,6 +18,7 @@ const initialState = {
     email: "",
     userId: 0,
     search: "",
+    title: "",
 }
 
 class Main extends Component {
@@ -61,6 +62,11 @@ class Main extends Component {
         if (search !== "") {
           window.location.pathname = `/search/${search}`
         }
+    }
+
+    gotoEdit = e => {
+        const title = window.document.getElementById('page-title').textContent;
+        window.location.pathname = `/edit/${title}`
     }
 
     gotoHome = e => {
@@ -117,15 +123,27 @@ class Main extends Component {
                         if (error) return "something happened"
                         console.log(data)
                         const page = data.pages.single;
-                    return (
+                     return (
                         <div id="main" className="site-wrapper" style={{margin: '1em', minWidth: '1240px'}}>
                             <div className="container" style={{maxWidth: '1800px'}}>
                                 <div className="post">
-                                <header className="post-header" style={{paddingRight: '20vw'}}>
-                                    <h1 className="text-capitalize" style={{fontSize: '4em', fontFamily: 'Merriweather, serif', width: '1300px', marginTop: '5vw', marginBottom: '0.3em', marginLeft: '6.35vw'}}>
-                                        {page.title}
-                                        <br />
-                                    </h1>
+                                <header className="post-header" style={{paddingRight: '4vw'}}>
+                                    {this.state.logIn ?
+                                    (
+                                    <div style={{display: "flex"}}>
+                                        <h1 id="page-title" className="text-capitalize" style={{fontSize: '4em', fontFamily: 'Merriweather, serif', width: '1300px', marginTop: '5vw', marginBottom: '0.3em', marginLeft: '6.35vw'}}>
+                                            {page.title}
+                                        </h1>
+                                        <button className="btn btn-primary" onClick={this.gotoEdit} style={{whiteSpace: 'normal', height: '38px', marginTop: '5vw', marginBottom: '0.3em', overflowX: 'visible', cursor: 'pointer'}} type="button">수정하기_</button>
+                                    </div>
+                                    ) : (
+                                    <div style={{display: "flex"}}>
+                                        <h1 className="text-capitalize" style={{fontSize: '4em', fontFamily: 'Merriweather, serif', width: '1300px', marginTop: '5vw', marginBottom: '0.3em', marginLeft: '6.35vw'}}>
+                                            {page.title}
+                                        </h1>
+                                    </div>
+                                    )}
+                                    
                                     <div className="links" style={{marginLeft: '6.35vw', marginBottom: '1em', width: '1300px'}}><span style={{fontSize: '1em'}}>https://papers.nips.cc/paper/6687-compression-aware-training-of-deep-networks.pdf</span>
                                     <p className="edittime">Last edited : May 5, 2019</p>
                                     </div>
