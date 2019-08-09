@@ -5,18 +5,20 @@ import markdownToHTML from '../lib/markdownEditor';
 import "../assets/bootstrap/css/bootstrap.min.css";
 import "../assets/css/styles.css";
 import logo from "../assets/img/logo3.png";
+import { arrayExpression } from '@babel/types';
 
 class Edit extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            text: 'Write markdown Text in here',
+            text: 'Write your text here',
             boxList: [],
             textList: [],     
         }
 
         this.addBox = this.addBox.bind(this);
+        this.deleteBox = this.deleteBox.bind(this);
         this.convertBox = this.convertBox.bind(this);
         this.handleTextChange = this.handleTextChange.bind(this);
     }
@@ -39,74 +41,194 @@ class Edit extends Component {
     addBox() {
         const boxList = this.state.boxList;
         const textList = this.state.textList;
-        const boxNumber = boxList.length;
+        let boxNumber;
         
+        if (Object.keys(boxList).length === 0) {
+            boxNumber = 0;
+        } else {
+            let boxListIdx = boxList[boxList.length - 1].key
+            boxNumber = parseInt(boxListIdx, 10) + 1;
+        }
+
+        textList[boxNumber] = "Write your text here"
         let inputBox = (
-            <div key={boxNumber} className="input" style={{width: '85vw', display: 'flex'}}>
+            <div key={boxNumber} id={`input-${boxNumber}`} className="input" style={{width: '85vw', display: 'flex'}}>
                 <textarea
                     id={`text-${boxNumber}`}
                     className="input-text"
                     rows="5"
                     onChange={this.handleTextChange}
-                    defaultValue={this.state.text}
+                    defaultValue={textList[boxNumber]}
                     style={{width: '80vw', border: '1px solid gray', marginBottom: '1vh'}}
                 />
                 <div style={{width: '2vw'}}>
                     <button 
-                        id={`button-${boxNumber}`}
+                        id={`button-confirm-${boxNumber}`}
                         style={{width: '2vw', height: '2vw', marginLeft: '0.5vw', marginBottom: '1vh', backgroundColor: 'green', borderRadius: '.25em', border: 'none', color: 'white'}}
                         onClick={this.convertBox}
                     >
-                        <h2>V</h2>
+                        <h3>V</h3>
                     </button>
                     <button 
+                        id={`button-delete-${boxNumber}`}
                         style={{width: '2vw', height: '2vw', marginLeft: '0.5vw', backgroundColor: 'red', borderRadius: '.25em', border: 'none', color: 'white'}}
+                        onClick={this.deleteBox}
                     >
-                        <h2>X</h2>
+                        <h3>X</h3>
                     </button>
                 </div>
             </div>
         )
-
-        boxList.push(inputBox)
-        textList.push("")
         
+        boxList[boxNumber] = inputBox
+        // boxList.push(inputBox)
+        // textList.push("Write markdown Text in here")
+
+        // console.log(textList)
         this.setState({
             boxList: boxList,
             textList: textList,
         })
     }
 
-    deleteBox() {
-        return
+    deleteBox = e => {
+        const boxNumber = (e.currentTarget.id).slice(-1);
+        let textList = this.state.textList;
+        let boxList = this.state.boxList;
+
+        boxList = boxList.filter(el => el !== boxList[boxNumber])
+        textList = textList.filter(el => el !== textList[boxNumber])
+        console.log(textList)
+        let typeList = Object.values(boxList).map(x => x.props.id.split("-")[0]);
+        let newIndexList = Array.from(Array(boxList.length).keys());
+        let that = this;
+
+        let newTextList = newIndexList.map(function(x) {
+            return (
+                Object.values(textList)[x]
+            )
+        })
+        console.log(newTextList)
+
+        let newBoxList = newIndexList.map(function(x) {
+            console.log(x)
+            console.log(newTextList)
+            console.log(newTextList[x])
+            return (
+            (typeList[x] === 'input') ? (
+            <div key={x} id={`${typeList[x]}-${x}`} className="input" style={{width: '85vw', display: 'flex'}}>
+                <textarea
+                    id={`text-${x}`}
+                    className="input-text"
+                    rows="5"
+                    onChange={that.handleTextChange}
+                    defaultValue={newTextList[x]}
+                    style={{width: '80vw', border: '1px solid gray', marginBottom: '1vh'}}
+                />
+                <div style={{width: '2vw'}}>
+                    <button 
+                        id={`button-confirm-${x}`}
+                        style={{width: '2vw', height: '2vw', marginLeft: '0.5vw', marginBottom: '1vh', backgroundColor: 'green', borderRadius: '.25em', border: 'none', color: 'white'}}
+                        onClick={that.convertBox}
+                    >
+                        <h3>V</h3>
+                    </button>
+                    <button 
+                        id={`button-delete-${x}`}
+                        style={{width: '2vw', height: '2vw', marginLeft: '0.5vw', backgroundColor: 'red', borderRadius: '.25em', border: 'none', color: 'white'}}
+                        onClick={that.deleteBox}
+                    >
+                        <h3>X</h3>
+                    </button>
+                </div>
+            </div>
+        ) : (
+            <div key={x} id={`${typeList[x]}-${x}`} className="output" style={{width: '80vw'}} onDoubleClick={that.convertBox}>
+                <div 
+                    id={`markdown-${x}`}
+                    dangerouslySetInnerHTML={that.getRawMarkup(x)}
+                    className="output-text"
+                >
+                </div>
+            </div>
+        ))})
+
+        // console.log(newBoxList)
+
+        this.setState({
+            boxList: newBoxList,
+            textList: newTextList,
+        })
     }
 
     convertBox = e => {
         // if id == output -> double click becomes input
         // if id == input -> shift+enter becomes output
         e.preventDefault()
-        let boxList = this.state.boxList;
-        let boxNumber = (e.currentTarget.id).slice(-1);
-        let outputBox = (
-            <div key={boxNumber} className="output" style={{width: '40vw'}}>
-                <div 
-                    id={`markdown-${boxNumber}`}
-                    dangerouslySetInnerHTML={this.getRawMarkup(boxNumber)}
-                    className="output-text"
-                >
+        if (e.currentTarget.className == 'output') {
+            let boxList = this.state.boxList;
+            let boxNumber = (e.currentTarget.id).slice(-1);
+            let inputBox = (
+                <div key={boxNumber} id={`input-${boxNumber}`} className="input" style={{width: '85vw', display: 'flex'}}>
+                    <textarea
+                        id={`text-${boxNumber}`}
+                        className="input-text"
+                        rows="5"
+                        onChange={this.handleTextChange}
+                        defaultValue={this.state.textList[boxNumber]}
+                        style={{width: '80vw', border: '1px solid gray', marginBottom: '1vh'}}
+                    />
+                    <div style={{width: '2vw'}}>
+                        <button 
+                            id={`button-confirm-${boxNumber}`}
+                            style={{width: '2vw', height: '2vw', marginLeft: '0.5vw', marginBottom: '1vh', backgroundColor: 'green', borderRadius: '.25em', border: 'none', color: 'white'}}
+                            onClick={this.convertBox}
+                        >
+                            <h3>V</h3>
+                        </button>
+                        <button 
+                            id={`button-delete-${boxNumber}`}
+                            style={{width: '2vw', height: '2vw', marginLeft: '0.5vw', backgroundColor: 'red', borderRadius: '.25em', border: 'none', color: 'white'}}
+                            onClick={this.deleteBox}
+                        >
+                            <h3>X</h3>
+                        </button>
+                    </div>
                 </div>
-            </div>
-        )
-        
-        boxList[boxNumber] = outputBox;
+            )
+            
+            boxList[boxNumber] = inputBox;
 
-        this.setState({
-            boxList: boxList,
-        })
+            this.setState({
+                boxList: boxList,
+            })
+
+        } else {
+            let boxList = this.state.boxList;
+            let boxNumber = (e.currentTarget.id).slice(-1);
+            let outputBox = (
+                <div key={boxNumber} id={`output-${boxNumber}`} className="output" style={{width: '80vw'}} onDoubleClick={this.convertBox}>
+                    <div 
+                        id={`markdown-${boxNumber}`}
+                        dangerouslySetInnerHTML={this.getRawMarkup(boxNumber)}
+                        className="output-text"
+                    >
+                    </div>
+                </div>
+            )
+            
+            boxList[boxNumber] = outputBox;
+    
+            this.setState({
+                boxList: boxList,
+            })
+        }
+        
     }
 
     render() {
         const title = this.props.match.params.title;
+        // console.log(this.state.textList)
         return (
             <div>
                 <header
@@ -129,29 +251,11 @@ class Edit extends Component {
                             style={{width: '3vw', height: '3vw', marginLeft: '1vw', marginRight: '1vw', backgroundColor: '#303030', borderRadius: '.25em', border: 'none', color: 'white'}}
                             onClick={this.addBox}
                         >
-                            <h1>+</h1>
+                            <h3>+</h3>
                         </button>
                     </div>
                     <div style={{display: 'flex', flexDirection: 'column', width: '80vw', marginTop: '5vh', marginRight: '10vw'}}>
-                        {this.state.boxList}
-                        {/* <div id='1' className="input" style={{width: '80vw'}}>
-                            <h3>Input</h3>
-                            <textarea
-                                className="input-text"
-                                rows="10"
-                                onChange={ e => this.setState({text: e.target.value})}
-                                defaultValue={this.state.text}
-                                style={{width: '80vw', border: 'none'}}
-                            />
-                        </div> */}
-                        {/* <div className="output" style={{width: '40vw'}}>
-                            <h3>Markdown</h3>
-                            <div 
-                                dangerouslySetInnerHTML={this.getRawMarkup()}
-                                className="output-text"
-                            >
-                            </div>
-                        </div> */}
+                        {Object.values(this.state.boxList)}
                     </div>
                 </div>
             </div>
