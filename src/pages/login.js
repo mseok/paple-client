@@ -25,6 +25,7 @@ class Login extends Component {
     }
 
     render() {
+        console.log(this.props)
         const { email, username, password, strategy } = this.state;
         return (
             <div>
@@ -37,7 +38,7 @@ class Login extends Component {
                 <div className="wrap">
                     <div className="header" style={{paddingTop: '132px', width: '1024px', margin: '0 auto'}}>
                     <h1>
-                        <img src={logo} style={{margin: '0 auto', cursor: 'pointer', display: "-webkit-box"}} onClick={this.gotoMain}/>
+                        <img src={logo} alt="logo" style={{margin: '0 auto', cursor: 'pointer', display: "-webkit-box"}} onClick={this.gotoMain}/>
                     </h1>
                     </div>
                     <div className="container" style={{width: '1024px'}}>
