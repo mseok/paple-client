@@ -28,7 +28,7 @@ const Root = () => {
                 <Route path="/signup" component={Signup} />
                 <Route path="/test" component={Test} />
                 <Route path="/search/:search" component={Search} />
-                <Route path="/edit/:title" component={Edit} />
+                <Route path="/edit/:pageId/:pageTitle" component={Edit} />
                 <Route path="/main/:pageId" component={Main} />
             </Switch>
         </Router>

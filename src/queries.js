@@ -64,41 +64,14 @@ export const PAGE_LIST_QUERY = gql`
         }
     }
 `
-// export const PAGE_QUERY = gql`
-//     {
-//         pages {
-//             single (id: 7) {
-//                 id
-//                 title
-//                 content
-//             }
-//         }
-//     }
-// `
 
-
-export const PAGE_MUTATION = gql`
-    mutation page(
-        $content: String!,
-        $description: String!,
-        $editor: String!
-        $locale: String!
-        $path: String!
-        $title: String!
-    ) {
-        page {
-            create(
-                content: $content,
-                description: $description,
-                editor: $editor,
-                locale: $locale,
-                path: $path,
-                title: $title
-            ) {
+export const PAGE_CREATE_MUTATION = gql`
+    mutation pages($pageId: Int!, $content: String) {
+        pages {
+            update(id: $pageId, content: $content) {
                 responseResult {
                     succeeded
                 }
-                page
             }
         }
     }

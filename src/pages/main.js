@@ -65,8 +65,9 @@ class Main extends Component {
     }
 
     gotoEdit = e => {
+        const id = parseInt(this.props.match.params.pageId, 10);
         const title = window.document.getElementById('page-title').textContent;
-        window.location.pathname = `/edit/${title}`
+        window.location.pathname = `/edit/${id}/${title}`
     }
 
     gotoHome = e => {
