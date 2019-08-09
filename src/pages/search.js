@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Query, Mutation } from 'react-apollo';
-import { PAGE_QUERY, PAGE_LIST_QUERY } from '../queries';
+import { SEARCH_QUERY } from '../queries';
 import Cookies from 'js-cookie';
 import facered from "../assets/img/facered.png";
 import authorbox from "../assets/img/authorbox.png";
@@ -60,14 +60,13 @@ class Search extends Component {
                     </div>
                     <div className="clearfix" />
                 </header>
-                <Query query={PAGE_LIST_QUERY}>
+                <Query query={SEARCH_QUERY} variables={{ query: this.props.match.params.search }}>
                 {({ loading, data, error }) => {
                     if (loading) return "loading"
                     if (error) return "something happened"
                     let id = [];
                     let title = []
-                    const pageData = data.pages.list;
-                    console.log(pageData)
+                    const pageData = data.pages.search.results;
                     pageData.forEach(array => {id.push(array.id); title.push(array.title)})
                     
                     return (pageData.map(array => 

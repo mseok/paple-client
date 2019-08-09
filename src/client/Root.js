@@ -15,7 +15,7 @@ const Root = () => {
                 <Route path="/login" component={Login} />
                 <Route path="/signup" component={Signup} />
                 <Route path="/test" component={Test} />
-                <Route path="/search" component={Search} />
+                <Route path="/search/:search" component={Search} />
                 <Route path="/main/:pageId" component={Main} />
             </Switch>
         </Router>

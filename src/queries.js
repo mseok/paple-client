@@ -103,3 +103,21 @@ export const PAGE_MUTATION = gql`
         }
     }
 `
+
+export const SEARCH_QUERY = gql`
+    query ($query: String!)  {
+        pages {
+            search(query:$query) {
+                results {
+                    id
+                    title
+                    description
+                    path
+                    locale
+                }
+                suggestions
+                totalHits
+            }
+        }
+}
+`
