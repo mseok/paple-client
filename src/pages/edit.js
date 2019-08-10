@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
 import markdownToHTML from '../lib/markdownEditor';
-import { Mutation } from 'react-apollo';
-import { PAGE_CREATE_MUTATION } from '../queries';
+import { Query, Mutation } from 'react-apollo';
+import { PAGE_QUERY, PAGE_CREATE_MUTATION } from '../queries';
 import "../assets/bootstrap/css/bootstrap.min.css";
 import "../assets/css/styles.css";
+import replacePathSepForGlob from 'jest-util/build/replacePathSepForGlob';
 
 class Edit extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            text: '',
             boxList: [],
-            textList: [],     
+            textList: [], 
+            isFirst: true,
         }
 
         this.addBox = this.addBox.bind(this);
@@ -22,7 +23,20 @@ class Edit extends Component {
         this.handleTextChange = this.handleTextChange.bind(this);
         this.getInputBox = this.getInputBox.bind(this);
         this.getOutputBox = this.getOutputBox.bind(this);
-        // this.handleSave = this.handleSave.bind(this);
+    }
+
+    setData = data => {
+        if (this.state.isFirst) {
+            let initialTextList = [];
+            let initialBoxList = [];
+            initialTextList[0] = data;
+            initialBoxList[0] = this.getOutputBox(0, data);
+            this.setState({
+                textList: initialTextList,
+                isFirst: false,
+                boxList: initialBoxList,
+            })
+        }
     }
 
     getInputBox = (index, text) => (
@@ -36,6 +50,11 @@ class Edit extends Component {
                 placeholder="Write your text here"
                 value={text}
                 style={{width: '80vw', border: '1px solid gray', marginBottom: '1vh'}}
+                onKeyUp={ e => {
+                    if (e.key === 'Enter' && e.shiftKey) {
+                        window.document.getElementById(`button-confirm-${index}`).click()
+                    }}
+                }
             />
             <div style={{width: '2vw'}}>
                 <button 
@@ -131,8 +150,6 @@ class Edit extends Component {
     }
 
     convertBox = e => {
-        // if id == output -> double click becomes input
-        // if id == input -> shift+enter becomes output
         e.preventDefault()
         if (e.currentTarget.className == 'output') {
             let boxList = this.state.boxList;
@@ -159,20 +176,15 @@ class Edit extends Component {
         }   
     }
 
-    // handleSave() {
-    //     let textList = this.state.textList;
-    //     console.log(this.getRawMarkup(textList[0]))
-    // }
-
     render() {
         const id = parseInt(this.props.match.params.pageId, 10);
         const textList = this.state.textList;
-        
-        let content = "";
-        for (let i=0;i<textList.length;i++) {
-            content += textList[i]
-        }
         const title = this.props.match.params.pageTitle;
+
+        let textContents = "";
+        for (let i=0;i<textList.length;i++) {
+            textContents += (textList[i]+ "\n")
+        }
 
         return (
             <div>
@@ -189,13 +201,16 @@ class Edit extends Component {
                                 type="button" 
                                 style={{borderColor: 'white', backgroundColor: '#303030', color: 'white', borderRadius: '.25rem', margin: '10px', marginRight: '20px', height: '38px'}}
                                 onClick={async () => {
-                                    console.log(id)
-                                    console.log(content)
-                                    console.log(typeof(id), typeof(content))
                                     const response = await mutate({
-                                        variables: { id: id, content: content }
+                                        variables: { pageId: id, content: textContents }
                                     })
-                                    // console.log(response.data)
+                                    let respObj = _.get(response, 'data.pages.update', {})
+                                    if (respObj.responseResult.succeeded) {
+                                        _.delay(() => {
+                                            // window.location.replace(`/main/${id}`)
+                                            return
+                                        })
+                                    }
                                 }}
                             >
                                 저장하기
@@ -213,7 +228,14 @@ class Edit extends Component {
                         </button>
                     </div>
                     <div style={{display: 'flex', flexDirection: 'column', width: '80vw', marginTop: '5vh', marginRight: '10vw'}}>
-                        {Object.values(this.state.boxList)}
+                        <Query query={PAGE_QUERY} variables={{ pageId:id }} onCompleted={data => this.setData(data.pages.single.content)}>
+                            {({ loading, data, error }) => {
+                                if (loading) return "loading"
+                                if (error) return {error}
+                                return Object.values(this.state.boxList)
+                            }}
+                        </Query>
+                        
                     </div>
                 </div>
             </div>
