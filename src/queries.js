@@ -49,6 +49,7 @@ export const PAGE_QUERY = gql`
                 description
                 title
                 render
+                content
             }
         }
     }
@@ -74,6 +75,9 @@ export const PAGE_CREATE_MUTATION = gql`
                     errorCode
                     slug
                     message
+                }
+                page {
+                    render
                 }
             }
         }
