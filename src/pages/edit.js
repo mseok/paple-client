@@ -25,55 +25,49 @@ class Edit extends Component {
         // this.handleSave = this.handleSave.bind(this);
     }
 
-    getInputBox(index, text) {
-        return (
-            <div key={index} id={`input-${index}`} className="input" style={{width: '85vw', display: 'flex'}}>
-                <textarea
-                    id={`text-${index}`}
-                    className="input-text"
-                    rows="5"
-                    onChange={this.handleTextChange}
-                    autoFocus
-                    placeholder="Write your text here"
-                    value={text}
-                    style={{width: '80vw', border: '1px solid gray', marginBottom: '1vh'}}
-                />
-                <div style={{width: '2vw'}}>
-                    <button 
-                        id={`button-confirm-${index}`}
-                        style={{width: '2vw', height: '2vw', marginLeft: '0.5vw', marginBottom: '1vh', backgroundColor: 'green', borderRadius: '.25em', border: 'none', color: 'white'}}
-                        onClick={this.convertBox}
-                    >
-                        <h3>V</h3>
-                    </button>
-                    <button 
-                        id={`button-delete-${index}`}
-                        style={{width: '2vw', height: '2vw', marginLeft: '0.5vw', backgroundColor: 'red', borderRadius: '.25em', border: 'none', color: 'white'}}
-                        onClick={this.deleteBox}
-                    >
-                        <h3>X</h3>
-                    </button>
-                </div>
-            </div>
-        )
-    }
-
-    getOutputBox(index, text) {
-        return (
-            <div key={index} id={`output-${index}`} className="output" style={{width: '80vw'}} onDoubleClick={this.convertBox}>
-                <div 
-                    id={`markdown-${index}`}
-                    dangerouslySetInnerHTML={this.getRawMarkup(text)}
-                    className="output-text"
+    getInputBox = (index, text) => (
+        <div key={index} id={`input-${index}`} className="input" style={{width: '85vw', display: 'flex'}}>
+            <textarea
+                id={`text-${index}`}
+                className="input-text"
+                rows="5"
+                onChange={this.handleTextChange}
+                autoFocus
+                placeholder="Write your text here"
+                value={text}
+                style={{width: '80vw', border: '1px solid gray', marginBottom: '1vh'}}
+            />
+            <div style={{width: '2vw'}}>
+                <button 
+                    id={`button-confirm-${index}`}
+                    style={{width: '2vw', height: '2vw', marginLeft: '0.5vw', marginBottom: '1vh', backgroundColor: 'green', borderRadius: '.25em', border: 'none', color: 'white'}}
+                    onClick={this.convertBox}
                 >
-                </div>
+                    <h3>V</h3>
+                </button>
+                <button 
+                    id={`button-delete-${index}`}
+                    style={{width: '2vw', height: '2vw', marginLeft: '0.5vw', backgroundColor: 'red', borderRadius: '.25em', border: 'none', color: 'white'}}
+                    onClick={this.deleteBox}
+                >
+                    <h3>X</h3>
+                </button>
             </div>
-        )
-    }
+        </div>
+    )
 
-    getRawMarkup(text) {
-        return {__html: markdownToHTML(text)}
-    }
+    getOutputBox = (index, text) => (
+        <div key={index} id={`output-${index}`} className="output" style={{width: '80vw'}} onDoubleClick={this.convertBox}>
+            <div 
+                id={`markdown-${index}`}
+                dangerouslySetInnerHTML={this.getRawMarkup(text)}
+                className="output-text"
+            >
+            </div>
+        </div>
+    )
+
+    getRawMarkup = text => ({__html: markdownToHTML(text)})
 
     handleTextChange = async e => {
         let textList = this.state.textList;
@@ -90,7 +84,7 @@ class Edit extends Component {
         })
     }
 
-    addBox() {
+    addBox = () => {
         const boxList = this.state.boxList;
         const textList = this.state.textList;
         let boxNumber;
@@ -125,16 +119,10 @@ class Edit extends Component {
         let newIndexList = Array.from(Array(boxList.length).keys());
         let that = this;
 
-        let newTextList = newIndexList.map(function(x) {
-            return (
-                Object.values(textList)[x]
-            )
-        })
-
-        let newBoxList = newIndexList.map(function(x) {
-
-            return (
-            (typeList[x] === 'input') ? that.getInputBox(x, newTextList[x]) : that.getOutputBox(x, newTextList[x]))})
+        let newTextList = newIndexList.map(x => Object.values(textList)[x])
+        let newBoxList = newIndexList.map(
+            x => ((typeList[x] === 'input') ? that.getInputBox(x, newTextList[x]) : that.getOutputBox(x, newTextList[x]))
+        )
 
         this.setState({
             boxList: newBoxList,
@@ -177,15 +165,12 @@ class Edit extends Component {
     // }
 
     render() {
-        let that = this;
         const id = parseInt(this.props.match.params.pageId, 10);
         const textList = this.state.textList;
-        let textContents = textList.map(function(text) {
-            return that.getRawMarkup(text)
-        })
+        
         let content = "";
-        for (let i=0;i<textContents.length;i++) {
-            content += textContents[i]["__html"]
+        for (let i=0;i<textList.length;i++) {
+            content += textList[i]
         }
         const title = this.props.match.params.pageTitle;
 
@@ -208,9 +193,9 @@ class Edit extends Component {
                                     console.log(content)
                                     console.log(typeof(id), typeof(content))
                                     const response = await mutate({
-                                        variables: { id, content }
+                                        variables: { id: id, content: content }
                                     })
-                                    console.log(response.data)
+                                    // console.log(response.data)
                                 }}
                             >
                                 저장하기
