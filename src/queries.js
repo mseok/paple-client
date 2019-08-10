@@ -71,6 +71,9 @@ export const PAGE_CREATE_MUTATION = gql`
             update(id: $pageId, content: $content) {
                 responseResult {
                     succeeded
+                    errorCode
+                    slug
+                    message
                 }
             }
         }

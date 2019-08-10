@@ -180,13 +180,14 @@ class Edit extends Component {
         let that = this;
         const id = parseInt(this.props.match.params.pageId, 10);
         const textList = this.state.textList;
-        let textContents = textList.map(function(text) {
-            return that.getRawMarkup(text)
-        })
-        let content = "";
-        for (let i=0;i<textContents.length;i++) {
-            content += textContents[i]["__html"]
-        }
+        const textContents = textList[0]
+        // let textContents = textList.map(function(text) {
+        //     return that.getRawMarkup(text)
+        // })
+        // let content = "";
+        // for (let i=0;i<textContents.length;i++) {
+        //     content += textContents[i]["__html"]
+        // }
         const title = this.props.match.params.pageTitle;
 
         return (
@@ -205,10 +206,10 @@ class Edit extends Component {
                                 style={{borderColor: 'white', backgroundColor: '#303030', color: 'white', borderRadius: '.25rem', margin: '10px', marginRight: '20px', height: '38px'}}
                                 onClick={async () => {
                                     console.log(id)
-                                    console.log(content)
-                                    console.log(typeof(id), typeof(content))
+                                    console.log(textContents)
+                                    console.log(typeof(id), typeof(textContents))
                                     const response = await mutate({
-                                        variables: { id, content }
+                                        variables: { pageId: id, content: textContents }
                                     })
                                     console.log(response.data)
                                 }}
