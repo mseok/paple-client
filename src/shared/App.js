@@ -76,17 +76,17 @@ class App extends Component {
               {this.state.logIn ? 
               (
               <div className="button-box" style={{height: '26.4vh', paddingTop: '1.39vh'}}>
-                <img className="rounded-circle border border-dark profile" alt="userimg" src={facered} style={{height: '60px'}} />
-                <i className="fa fa-bell-o" id="noti" style={{fontSize: '35px', padding: '0 30px', marginTop: '15px'}} />
-                <div className="btn-group" role="group" style={{marginTop: '15px'}}>
-                 <button className="btn btn-primary" id="button-signout" type="button" onClick={this.handleLogout}>로그아웃</button>
+                <div className="btn-group" style={{float: 'right', top: '0', width: '250px', height: '60px', color: 'black'}} role="group">
+                  <button className="btn btn-primary" id="button-signout" style={{borderRadius: '.25rem', borderColor: '#611427', margin: '11px 10px', height: '38px', fontSize: '12px', fontWeight: '400'}} type="button" onClick={this.handleLogout}>로그아웃</button>
+                  <img className="rounded-circle border border-dark profile" alt="userimg" src={facered} style={{margin: '0 10px', height: '60px'}} />
+                  <i className="fa fa-bell-o" id="noti" style={{fontSize: '35px', padding: '0 10px', marginTop: '15px'}} />
                 </div>
               </div>
               ) : (
               <div className="button-box" style={{height: '26.4vh', paddingTop: '1.39vh'}}>
-                <div className="btn-group" role="group">
-                  <button className="btn btn-primary" id="button-signup" type="button" onClick={this.gotoSignup}>회원가입</button>
-                  <button className="btn btn-primary" id="button-signin" type="button" onClick={this.gotoLogin}>로그인</button>
+                <div className="btn-group" style={{float: 'right', top: '0', width: '160px', height: '60px', color: 'black'}} role="group">
+                  <button className="btn btn-primary" id="button-signup" style={{marginTop: '11px', marginBottom: '11px', borderColor: '#611427', color: '#611427', fontSize: '12px', fontWeight: '400'}} type="button" onClick={this.gotoSignup}>회원가입</button>
+                  <button className="btn btn-primary" id="button-signin" style={{marginTop: '11px', marginBottom: '11px', borderColor: '#611427', backgroundColor: '#611427', color: 'white', fontSize: '12px', fontWeight: '400'}} type="button" onClick={this.gotoLogin}>로그인</button>
                 </div>
               </div>
               )}

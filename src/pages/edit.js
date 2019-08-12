@@ -15,6 +15,8 @@ class Edit extends Component {
             boxList: [],
             textList: [], 
             isFirst: true,
+            text: "# Change header text by double clicking cell.",
+            focusingBox: "",
         }
 
         this.addBox = this.addBox.bind(this);
@@ -23,6 +25,16 @@ class Edit extends Component {
         this.handleTextChange = this.handleTextChange.bind(this);
         this.getInputBox = this.getInputBox.bind(this);
         this.getOutputBox = this.getOutputBox.bind(this);
+        this.upBox = this.upBox.bind(this);
+        this.downBox = this.downBox.bind(this);
+        this.switch = this.switch.bind(this);
+    }
+
+    componentDidMount(){
+        if (this.state.focusingBox !== "") {
+            this.state.focusingBox.focus(); 
+            console.log(this.state.focusingBox)
+        }
     }
 
     setData = data => {
@@ -50,8 +62,17 @@ class Edit extends Component {
                 placeholder="Write your text here"
                 value={text}
                 style={{width: '80vw', border: '1px solid gray', marginBottom: '1vh'}}
+                onKeyDown={ e => {
+                    if (e.shiftKey) {
+                        if (e.keyCode === 13) {
+                            console.log('success')
+                            e.preventDefault()
+                            return false
+                        }
+                    }
+                }}
                 onKeyUp={ e => {
-                    if (e.key === 'Enter' && e.shiftKey) {
+                    if (e.shiftKey && e.keyCode === 13) {
                         window.document.getElementById(`button-confirm-${index}`).click()
                     }}
                 }
@@ -59,17 +80,31 @@ class Edit extends Component {
             <div style={{width: '2vw'}}>
                 <button 
                     id={`button-confirm-${index}`}
-                    style={{width: '2vw', height: '2vw', marginLeft: '0.5vw', marginBottom: '1vh', backgroundColor: 'green', borderRadius: '.25em', border: 'none', color: 'white'}}
+                    style={{width: '2vw', height: '2vw', marginLeft: '0.5vw', marginBottom: '.5vh', background: 'none', border: 'none', color: 'white'}}
                     onClick={this.convertBox}
                 >
-                    <h3>V</h3>
+                    ⭕
                 </button>
                 <button 
                     id={`button-delete-${index}`}
-                    style={{width: '2vw', height: '2vw', marginLeft: '0.5vw', backgroundColor: 'red', borderRadius: '.25em', border: 'none', color: 'white'}}
+                    style={{width: '2vw', height: '2vw', marginLeft: '0.5vw', marginBottom: '.5vh', background: 'none', border: 'none', color: 'white'}}
                     onClick={this.deleteBox}
                 >
-                    <h3>X</h3>
+                    ❌
+                </button>
+                <button 
+                    id={`button-up-${index}`}
+                    style={{width: '2vw', height: '2vw', marginLeft: '0.5vw', marginBottom: '.5vh', background: 'none', border: 'none', color: 'white'}}
+                    onClick={this.upBox}
+                >
+                    ⬆
+                </button>
+                <button 
+                    id={`button-down-${index}`}
+                    style={{width: '2vw', height: '2vw', marginLeft: '0.5vw', background: 'none', border: 'none', color: 'white'}}
+                    onClick={this.downBox}
+                >
+                    ⬇
                 </button>
             </div>
         </div>
@@ -103,6 +138,92 @@ class Edit extends Component {
         })
     }
 
+    addHeader = () => {
+        const boxList = this.state.boxList;
+        const textList = this.state.textList;
+        let boxNumber;
+        
+        if (Object.keys(boxList).length === 0) {
+            boxNumber = 0;
+        } else {
+            let boxListIdx = boxList[boxList.length - 1].key
+            boxNumber = parseInt(boxListIdx, 10) + 1;
+        }
+
+        let outputBox = this.getOutputBox(boxNumber, this.state.text)
+        
+        boxList[boxNumber] = outputBox
+        textList[boxNumber] = this.state.text
+
+        this.setState({
+            boxList: boxList,
+            textList: textList,
+        })
+    }
+
+    switch = (type, arr, idx) => {
+        if (type === "upper") {
+            let higher = arr[idx - 1]
+            let lower = arr[idx]
+
+            arr[idx - 1] = lower;
+            arr[idx] = higher;
+        } else {
+            let higher = arr[idx]
+            let lower = arr[idx + 1]
+
+            arr[idx] = lower;
+            arr[idx + 1] = higher;
+        }
+    }
+
+    upBox = e => {
+        let boxList = this.state.boxList;
+        let textList = this.state.textList;
+        let typeList = Object.values(boxList).map(x => x.props.id.split("-")[0]);
+        let newIndexList = Array.from(Array(boxList.length).keys());
+        const boxNumber = parseInt((e.currentTarget.id).slice(-1), 10);
+        
+        if (boxList.length >= 2 && boxNumber !== 0) {
+            this.switch("upper", textList, boxNumber)
+            this.switch("upper", typeList, boxNumber)
+
+            let newTextList = newIndexList.map(x => Object.values(textList)[x])
+            let newBoxList = newIndexList.map(
+                x => ((typeList[x] === 'input') ? this.getInputBox(x, newTextList[x]) : this.getOutputBox(x, newTextList[x]))
+            )
+            
+            this.setState({
+                boxList: newBoxList,
+                textList: newTextList,
+                focusingBox: newBoxList[boxNumber - 1],
+            })
+        }
+    }
+
+    downBox = e => {
+        let boxList = this.state.boxList;
+        let textList = this.state.textList;
+        let typeList = Object.values(boxList).map(x => x.props.id.split("-")[0]);
+        let newIndexList = Array.from(Array(boxList.length).keys());
+        const boxNumber = parseInt((e.currentTarget.id).slice(-1), 10);
+
+        if (boxList.length >= 2 && boxNumber !== boxList.length) {
+            this.switch("downer", textList, boxNumber)
+            this.switch("downer", typeList, boxNumber)
+
+            let newTextList = newIndexList.map(x => Object.values(textList)[x])
+            let newBoxList = newIndexList.map(
+                x => ((typeList[x] === 'input') ? this.getInputBox(x, newTextList[x]) : this.getOutputBox(x, newTextList[x]))
+            )
+
+            this.setState({
+                boxList: newBoxList,
+                textList: newTextList,
+            })
+        }
+    }
+
     addBox = () => {
         const boxList = this.state.boxList;
         const textList = this.state.textList;
@@ -115,7 +236,7 @@ class Edit extends Component {
             boxNumber = parseInt(boxListIdx, 10) + 1;
         }
 
-        let inputBox = this.getInputBox(boxNumber, this.state.text)
+        let inputBox = this.getInputBox(boxNumber, "")
         
         boxList[boxNumber] = inputBox
         textList[boxNumber] = ""
@@ -127,7 +248,7 @@ class Edit extends Component {
     }
 
     deleteBox = e => {
-        const boxNumber = (e.currentTarget.id).slice(-1);
+        const boxNumber = parseInt((e.currentTarget.id).slice(-1), 10);
         let textList = this.state.textList;
         let boxList = this.state.boxList;
 
@@ -207,7 +328,8 @@ class Edit extends Component {
                                     let respObj = _.get(response, 'data.pages.update', {})
                                     if (respObj.responseResult.succeeded) {
                                         _.delay(() => {
-                                            // window.location.replace(`/main/${id}`)
+                                            console.log(respObj.page.render)
+                                            window.location.replace(`/main/${id}`)
                                             return
                                         })
                                     }
@@ -219,16 +341,22 @@ class Edit extends Component {
                     </Mutation>
                 </header>
                 <div style={{display: 'flex', flexDirection: 'row', width: '100vw'}}>
-                    <div style={{width: '5vw', marginTop: '5vh', marginLeft: '5vw', display: 'flex'}}>
+                    <div style={{width: '10vw', marginTop: '5vh', marginLeft: '5vw', display: 'flex', flexDirection: 'column'}}>
                         <button 
-                            style={{width: '3vw', height: '3vw', marginLeft: '1vw', marginRight: '1vw', backgroundColor: '#303030', borderRadius: '.25em', border: 'none', color: 'white'}}
+                            style={{width: '6vw', height: '3vw', margin: '0.5vw 2vw', backgroundColor: '#303030', borderRadius: '.25em', border: 'none', color: 'white'}}
+                            onClick={this.addHeader}
+                        >
+                            Add Header
+                        </button>
+                        <button 
+                            style={{width: '6vw', height: '3vw', margin: '1vw 2vw', backgroundColor: '#303030', borderRadius: '.25em', border: 'none', color: 'white'}}
                             onClick={this.addBox}
                         >
-                            <h3>+</h3>
+                            Add Content
                         </button>
                     </div>
-                    <div style={{display: 'flex', flexDirection: 'column', width: '80vw', marginTop: '5vh', marginRight: '10vw'}}>
-                        <Query query={PAGE_QUERY} variables={{ pageId:id }} onCompleted={data => this.setData(data.pages.single.content)}>
+                    <div style={{display: 'flex', flexDirection: 'column', width: '80vw', marginTop: '5vh', marginRight: '5vw'}}>
+                        <Query query={PAGE_QUERY} variables={{ pageId: id }} onCompleted={data => this.setData(data.pages.single.content)}>
                             {({ loading, data, error }) => {
                                 if (loading) return "loading"
                                 if (error) return {error}

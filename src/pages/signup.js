@@ -88,7 +88,7 @@ class Signup extends Component {
                                             <button
                                                 className="btn btn-primary"
                                                 type="button"
-                                                style={{width: '100%', padding: 0, height: '60px', backgroundColor: '#8D4B4B', borderColor: '#8D4B4B'}}
+                                                style={{width: '100%', padding: 0, height: '60px', backgroundColor: '#8D4B4B', color: 'white', fontSize: '25px', borderColor: '#8D4B4B'}}
                                                 onClick={async () => {
                                                     let that = this;
                                                     return new Promise( async (resolve, reject) => {
