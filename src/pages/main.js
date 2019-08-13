@@ -70,6 +70,12 @@ class Main extends Component {
         window.location.pathname = `/edit/${id}/${title}`
     }
 
+    gotoLog = e => {
+        const id = parseInt(this.props.match.params.pageId, 10);
+        const title = window.document.getElementById('page-title').textContent;
+        window.location.pathname = `/log/${id}/${title}`
+    }
+
     gotoHome = e => {
         window.location.pathname = "/";
     }
@@ -156,9 +162,11 @@ class Main extends Component {
                     {({ loading, data, error }) => {
                         if (loading) return "loading"
                         if (error) {console.log(error); return "something happened"}
-                        const page = data.pages.single;
-                        let description = page.description;
+                        const page = data.pages.single
+                        let description = page.description
                         let tlDescription = description.split("\n")
+
+
 
                         return (
                             <div id="main" className="site-wrapper" style={{margin: '1em', minWidth: '1240px'}}>
@@ -170,13 +178,13 @@ class Main extends Component {
                                                 <br />
                                             </h1>
                                             <div className="links" style={{marginLeft: '6.35vw', marginBottom: '1em', width: '1300px'}}>
-                                                <span className="head-link">ref link</span>
-                                                <p className="head-edittime">last updated date</p>
+                                                <span className="head-link">{page.referenceLink}</span>
+                                                <p className="head-edittime">{page.updatedAt}</p>
                                             </div>
                                             {this.state.logIn ? 
                                             (
                                                 <div className="btn-group" role="group">
-                                                    <button className="btn btn-primary" type="button">수정내역</button>
+                                                    <button className="btn btn-primary" type="button" onClick={this.gotoLog}>수정내역</button>
                                                     <button className="btn btn-primary" type="button" onClick={this.gotoEdit}>수정하기</button>
                                                 </div>
                                             ) : (
@@ -185,7 +193,7 @@ class Main extends Component {
                                             )}
                                             <div className="author">
                                                 <img src={authorbox} style={{marginRight: '20px'}} />
-                                                <span className="head-auhtor">authorname</span>
+                                                <span className="head-auhtor">{page.thesisAuthor}</span>
                                             </div>
                                         </header>
                                     </div>
