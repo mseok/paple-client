@@ -84,3 +84,23 @@ export const PAGE_CREATE_MUTATION = gql`
         }
     }
 `
+
+
+
+export const SEARCH_QUERY = gql`
+    query ($query: String!)  {
+        pages {
+            search(query:$query) {
+                results {
+                    id
+                    title
+                    description
+                    path
+                    locale
+                }
+                suggestions
+                totalHits
+            }
+        }
+}
+`
