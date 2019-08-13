@@ -29,7 +29,7 @@ const Root = () => {
                 <Route path="/test" component={Test} />
                 <Route path="/search/:search" component={Search} />
                 <Route path="/edit/:pageId/:pageTitle" component={Edit} />
-                <Route path="/main/:pageId" component={Main} />
+                <Route path="/main/:pageId/:pageTitle" component={Main} />
             </Switch>
         </Router>
     )

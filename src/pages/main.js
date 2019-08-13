@@ -157,6 +157,9 @@ class Main extends Component {
                         if (loading) return "loading"
                         if (error) {console.log(error); return "something happened"}
                         const page = data.pages.single;
+                        let description = page.description;
+                        let tlDescription = description.split("\n")
+
                         return (
                             <div id="main" className="site-wrapper" style={{margin: '1em', minWidth: '1240px'}}>
                                 <div className="container" style={{maxWidth: '1800px'}}>
@@ -190,15 +193,17 @@ class Main extends Component {
                                 <div className="tldr">
                                     <p className="tldr-title">TL;DR</p>
                                     <ol className="tldr-content" type="i">
-                                        <li className="tldr-content-listitem">{page.description}<br /></li>
-                                        <li className="tldr-content-listitem">{page.description}<br /></li>
-                                        <li className="tldr-content-listitem">{page.description}<br /></li>
+                                        <li className="tldr-content-listitem">{tlDescription[0]}<br /></li>
+                                        <li className="tldr-content-listitem">{tlDescription[1]}<br /></li>
+                                        <li className="tldr-content-listitem">{tlDescription[2]}<br /></li>
                                     </ol>
                                     <p className="tldr-foot" />
                                 </div>
-                                <div className="post-wrapper">
-                                    { ReactHtmlParser (page.render) }
-                                </div>
+                                <article className="post-content">
+                                    <div className="post-wrapper">
+                                        { ReactHtmlParser (page.render) }
+                                    </div>
+                                </article>
                             </div>
                         )
                     }}

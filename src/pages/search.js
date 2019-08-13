@@ -47,12 +47,15 @@ class Search extends Component {
     }
 
     gotoPage = e => {
-        return new Promise( (resolve, reject) => {
-            const pageId = e.target.id;
-            resolve(pageId)
-        }).then(function(pageId) {
-            window.location.pathname = `main/${pageId}`
-        })
+        // return new Promise( (resolve, reject) => {
+        //     const pageId = e.target.id;
+        //     resolve(pageId)
+        // }).then(function(pageId) {
+        //     window.location.pathname = `main/${pageId}`
+        // })
+        const pageId = e.target.id;
+        let [id, title] = pageId.split('-')
+        window.location.pathname = `main/${id}/${title}`
     }
 
     gotoLogin = e => {
@@ -167,9 +170,9 @@ class Search extends Component {
                     return (pageData.map(array => 
                         <div id="main" className="site-wrapper" style={{margin: '1em', minWidth: '1240px'}}>
                             <div className="post" onClick={this.gotoPage}>
-                                <header id={array.id} className="post-header" style={{padding: '15px', marginBotton: '10px', border: '1px solid black'}}>
-                                    <h3 id={array.id} style={{width: '1340px'}}>{array.id}</h3>
-                                    <h1 id={array.id} className="text-capitalize" style={{fontSize: '4em', fontFamily: 'Merriweather, serif', width: '1340px'}}>
+                                <header id={`${array.id}-${array.title}`} className="post-header" style={{padding: '15px', marginBotton: '10px', border: '1px solid black'}}>
+                                    <h3 id={`${array.id}-${array.title}`} style={{width: '1340px'}}>{array.id}</h3>
+                                    <h1 id={`${array.id}-${array.title}`} className="text-capitalize" style={{fontSize: '4em', fontFamily: 'Merriweather, serif', width: '1340px'}}>
                                         {array.title}
                                     </h1>
                                 </header>

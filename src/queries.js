@@ -67,9 +67,9 @@ export const PAGE_LIST_QUERY = gql`
 `
 
 export const PAGE_CREATE_MUTATION = gql`
-    mutation pages($pageId: Int!, $content: String) {
+    mutation pages($pageId: Int!, $content: String, $description: String) {
         pages {
-            update(id: $pageId, content: $content) {
+            update(id: $pageId, content: $content, description: $description) {
                 responseResult {
                     succeeded
                     errorCode
@@ -78,6 +78,7 @@ export const PAGE_CREATE_MUTATION = gql`
                 }
                 page {
                     render
+                    description
                 }
             }
         }
