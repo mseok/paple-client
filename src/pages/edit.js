@@ -88,6 +88,14 @@ class Edit extends Component {
         }
     }
 
+    setTLDR = data => {
+        console.log(data)
+        let tlDescription = data.split("\n")
+        this.setState({
+            tldr: tlDescription
+        })
+    }
+
     getInputBox = (index, text) => (
         <div key={index} id={`input-${index}`} className="input" style={{width: '69em'}}>
             <textarea
@@ -373,7 +381,7 @@ class Edit extends Component {
                         </div>
                     <div className="clearfix" />
                 </header>
-                <Query query={PAGE_QUERY} variables={{ pageId: id }} onCompleted={data => this.setData(data.pages.single.content)}>
+                <Query query={PAGE_QUERY} variables={{ pageId: id }} onCompleted={data => {this.setData(data.pages.single.content); this.setTLDR(data.pages.single.description)}}>
                     {({ loading, data, error }) => {
                         if (loading) return "loading"
                         if (error) {console.log(error); return "something happened"}
