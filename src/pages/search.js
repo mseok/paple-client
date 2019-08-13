@@ -47,12 +47,15 @@ class Search extends Component {
     }
 
     gotoPage = e => {
-        return new Promise( (resolve, reject) => {
-            const pageId = e.target.id;
-            resolve(pageId)
-        }).then(function(pageId) {
-            window.location.pathname = `main/${pageId}`
-        })
+        // return new Promise( (resolve, reject) => {
+        //     const pageId = e.target.id;
+        //     resolve(pageId)
+        // }).then(function(pageId) {
+        //     window.location.pathname = `main/${pageId}`
+        // })
+        const pageId = e.target.id;
+        let [id, title] = pageId.split('-')
+        window.location.pathname = `main/${id}/${title}`
     }
 
     gotoLogin = e => {
@@ -88,35 +91,70 @@ class Search extends Component {
                 <meta charSet="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
                 <title>viewpage_real</title>
-                <header className="site-header" style={{minWidth: '1240px', position: 'sticky', top: '0px', background: 'white'}}>
-                    <div className="container" style={{maxWidth: '1750px', margin: '0 auto', paddingBottom: '20px'}}>
-                        <img src={logo3_editted_cut} alt="logo" onClick={this.gotoHome} style={{cursor: 'pointer', width: '8em', marginRight: '10em', paddingBottom: '0px'}} />
-                        <input
-                            className="form-control-lg"
-                            type="text"
-                            style={{width: '53vw', paddingTop: '8px', zIndex: 13, height: '50px', marginLeft: '15px', marginRight: '10px'}}
-                            onChange={ e => this.setState({search: e.target.value}) }
-                            onKeyUp={ e => {if (e.keyCode === 13) {window.document.getElementById('search-icon').click()}} }/>
-                        <i
-                            id="search-icon"
-                            style={{cursor: 'pointer'}}
-                            className="fa fa-search"
-                            onClick={this.gotoSearch}
-                        />
+                <header className="site-header" style={{minWidth: '1240px', paddingLeft: 0, paddingRight: 0, paddingTop: '4px'}}>
+                    <div className="container" style={{margin: 0, paddingBottom: '4px', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingLeft: '75px', paddingRight: '50px', maxWidth: '100%'}}>
+                        <img src={logo3_editted_cut} style={{cursor: 'pointer', height: '5em', marginRight: '3em', paddingBottom: '0px'}} onClick={this.gotoHome} />
+                        <div style={{display: 'flex', width: '60vw', }}>
+                            <input 
+                                className="form-control-lg" 
+                                type="text" 
+                                style={{width: '55vw', paddingTop: '8px', zIndex: 13, height: '50px', marginTop: '13px', fontSize: '20px', fontFamily: 'Roboto, sans-serif', marginLeft: '5px', marginRight: '5px', paddingLeft: '20px'}}
+                                placeholder="Search here" 
+                                onChange={ e => this.setState({search: e.target.value}) }
+                                onKeyUp={ e => {if (e.keyCode === 13) {window.document.getElementById('search-icon').click()}} }
+                            />
+                            <i
+                                id="search-icon"
+                                style={{cursor: 'pointer', marginTop: '15px'}}
+                                className="fa fa-search"
+                                onClick={this.gotoSearch}
+                            />
+                        </div>
                         {this.state.logIn ? 
                         (   
-                            <div className="btn-group" role="group" style={{marginTop: '5px', width: '250px'}}>
-                                <button className="btn btn-primary" id="button-signout" type="button" style={{borderRadius: '.25rem', margin: '15px', height: '38px'}} onClick={this.handleLogout}>로그아웃</button>
-                                <i className="fa fa-bell-o" id="noti" style={{fontSize: '35px', padding: '0 5px', marginTop: '15px', marginRight: '15px'}} />
-                                <img className="rounded-circle border border-dark profile" alt="userimg" src={facered} style={{height: '60px'}} />
+                            <div className="thumbnail-bar" style={{marginTop: '1px'}}>
+                                <button 
+                                    className="btn btn-primary" 
+                                    id="button-signout" 
+                                    type="button" 
+                                    style={{borderRadius: '.25rem', marginTop: '15px', height: '38px', borderColor: '#611427', fontSize: '12px'}}
+                                    onClick={this.handleLogout}
+                                >
+                                    로그아웃
+                                </button>
+                                <img 
+                                    className="rounded-circle border border-dark Thumbnail" 
+                                    src={facered} 
+                                    style={{height: '50px', marginTop: '8px'}} 
+                                />
+                                <i 
+                                    className="fa fa-bell-o"
+                                    style={{fontSize: '3em', padding: '0.2em', float: 'right'}}
+                                />
                             </div>
                         ) : (
-                            <div className="btn-group" role="group" style={{marginTop: '20px'}}>
-                                <button className="btn btn-primary" id="button-signup" type="button" onClick={this.gotoSignup}>회원가입</button>
-                                <button className="btn btn-primary" id="button-signin" type="button" onClick={this.gotoLogin}>로그인</button>
+                            <div className="thumbnail-bar" style={{marginTop: '1px'}}>
+                                <button 
+                                    className="btn btn-primary" 
+                                    id="button-signup" 
+                                    type="button" 
+                                    style={{borderTopRightRadius: '0', borderBottomRightRadius: '0', marginTop: '15px', height: '38px', borderColor: '#611427', fontSize: '12px'}}
+                                    onClick={this.gotoSignup}
+                                >
+                                    회원가입
+                                </button>
+                                <button 
+                                    className="btn btn-primary" 
+                                    id="button-signin" 
+                                    type="button" 
+                                    style={{borderTopLeftRadius: '0', borderBottomLeftRadius: '0', marginTop: '15px', height: '38px', background: '#611427', color: 'white', borderColor: '#611427', fontSize: '12px'}}
+                                    onClick={this.gotoLogin}
+                                >
+                                    로그인
+                                </button>
                             </div>
                         )}
-                    </div>
+                        </div>
                     <div className="clearfix" />
                 </header>
                 <Query query={PAGE_LIST_QUERY}>
@@ -132,9 +170,9 @@ class Search extends Component {
                     return (pageData.map(array => 
                         <div id="main" className="site-wrapper" style={{margin: '1em', minWidth: '1240px'}}>
                             <div className="post" onClick={this.gotoPage}>
-                                <header id={array.id} className="post-header" style={{padding: '15px', marginBotton: '10px', border: '1px solid black'}}>
-                                    <h3 id={array.id} style={{width: '1340px'}}>{array.id}</h3>
-                                    <h1 id={array.id} className="text-capitalize" style={{fontSize: '4em', fontFamily: 'Merriweather, serif', width: '1340px'}}>
+                                <header id={`${array.id}-${array.title}`} className="post-header" style={{padding: '15px', marginBotton: '10px', border: '1px solid black'}}>
+                                    <h3 id={`${array.id}-${array.title}`} style={{width: '1340px'}}>{array.id}</h3>
+                                    <h1 id={`${array.id}-${array.title}`} className="text-capitalize" style={{fontSize: '4em', fontFamily: 'Merriweather, serif', width: '1340px'}}>
                                         {array.title}
                                     </h1>
                                 </header>

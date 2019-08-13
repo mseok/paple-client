@@ -98,7 +98,7 @@ class Login extends Component {
                                                     }
                                                 }
                                             }}
-                                            style={{width: '100%', marginTop: '30px', marginBottom: '50px', height: '70px', fontFamily: '"Nanum Gothic", sans-serif', fontSize: '25px', letterSpacing: '2px', backgroundColor: '#8D4B4B', borderColor: '#8D4B4B'}}
+                                            style={{width: '100%', marginTop: '30px', marginBottom: '50px', height: '70px', fontFamily: '"Nanum Gothic", sans-serif', fontSize: '25px', letterSpacing: '2px', backgroundColor: '#8D4B4B', borderColor: '#8D4B4B', color: 'white'}}
                                         >
                                             로그인
                                         </button>
