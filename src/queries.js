@@ -50,6 +50,9 @@ export const PAGE_QUERY = gql`
                 title
                 render
                 content
+                referenceLink
+                thesisAuthor
+                updatedAt
             }
         }
     }
@@ -69,7 +72,7 @@ export const PAGE_LIST_QUERY = gql`
 export const PAGE_CREATE_MUTATION = gql`
     mutation pages($pageId: Int!, $content: String, $description: String) {
         pages {
-            update(id: $pageId, content: $content, description: $description) {
+            update(id: $pageId, content: $content, description: $description, isPublished: true) {
                 responseResult {
                     succeeded
                     errorCode
@@ -102,5 +105,22 @@ export const SEARCH_QUERY = gql`
                 totalHits
             }
         }
+}
+`
+
+export const LOG_QUERY = gql`
+query pages($pageId: Int!, $offsetPage: Int!, $offsetSize: Int!) {
+    history(id: $pageId, offsetPage: $offsetPage, offsetSize:$offsetSize){
+        trail{
+          versionId
+          authorId
+          authorName
+          actionType
+          valueBefore
+          valueAfter
+          createdAt
+        }
+        total
+    }
 }
 `

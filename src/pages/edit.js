@@ -399,8 +399,8 @@ class Edit extends Component {
                                                 <br />
                                             </h1>
                                             <div className="links" style={{marginLeft: '6.35vw', marginRight: '0', marginBottom: '1em', width: '1300px'}}>
-                                                <span className="head-link">ref link</span>
-                                                <p className="head-edittime">last updated date</p>
+                                                <span className="head-link">{page.referenceLink}</span>
+                                                <p className="head-edittime">{page.updatedAt}</p>
                                             </div>
                                             <div className="btn-group" style={{width: '120px'}} role="group">
                                                 <Mutation mutation={PAGE_CREATE_MUTATION}>
@@ -429,7 +429,7 @@ class Edit extends Component {
                                             </div>
                                             <div className="author">
                                                 <img src={authorbox} style={{marginRight: '20px'}} />
-                                                <span className="head-auhtor">authorname</span>
+                                                <span className="head-auhtor">{page.thesisAuthor}</span>
                                             </div>
                                         </header>
                                     </div>
