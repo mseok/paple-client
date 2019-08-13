@@ -25,6 +25,9 @@ class Edit extends Component {
             search: "",
             minRows: 1,
             maxRows: 100,
+            thesisAuthor: "",
+            referenceLink: "",
+            updatedAt: new Date(),
         }
 
         this.addBox = this.addBox.bind(this);
@@ -88,11 +91,16 @@ class Edit extends Component {
         }
     }
 
-    setTLDR = data => {
-        console.log(data)
-        let tlDescription = data.split("\n")
+    setInitialState = data => {
+        let tlDescription = data.description.split("\n");
+        let title = data.title;
+        let referenceLink = data.referenceLink;
+        let thesisAuthor = data.thesisAuthor;
         this.setState({
-            tldr: tlDescription
+            tldr: tlDescription,
+            title,
+            referenceLink,
+            thesisAuthor
         })
     }
 
@@ -240,7 +248,6 @@ class Edit extends Component {
                 x => ((typeList[x] === 'input') ? this.getInputBox(x, newTextList[x]) : this.getOutputBox(x, newTextList[x]))
             )
 
-            
             this.setState({
                 boxList: newBoxList,
                 rowsList: newRowsList,
@@ -330,9 +337,10 @@ class Edit extends Component {
         for (let i=0;i<textList.length;i++) {
             textContents += (textList[i]+ "\n")
         }
-
+        let { newTitle, referenceLink, thesisAuthor, updatedAt } = this.state;
         let tldr = this.state.tldr;
         tldr = tldr.join("\n");
+        console.log(typeof(this.state.updatedAt))
 
         return (
             <div>
@@ -381,7 +389,16 @@ class Edit extends Component {
                         </div>
                     <div className="clearfix" />
                 </header>
-                <Query query={PAGE_QUERY} variables={{ pageId: id }} onCompleted={data => {this.setData(data.pages.single.content); this.setTLDR(data.pages.single.description)}}>
+                <Query 
+                    query={PAGE_QUERY}
+                    variables={{ pageId: id }}
+                    onCompleted={
+                        data => {
+                            this.setData(data.pages.single.content);
+                            this.setInitialState(data.pages.single);
+                        }
+                    }
+                >
                     {({ loading, data, error }) => {
                         if (loading) return "loading"
                         if (error) {console.log(error); return "something happened"}
@@ -395,11 +412,23 @@ class Edit extends Component {
                                     <div className="post">
                                         <header className="post-header" style={{paddingRight: '4vw'}}>
                                             <h1 className="text-capitalize head-title" id="page-title">
-                                                {page.title}
+                                                <input 
+                                                    style={{border: 'none', borderBottom: '1px solid gray'}}
+                                                    onChange={ e => this.setState({title: e.target.value})}
+                                                    defaultValue={page.title}
+                                                >
+                                                </input>
                                                 <br />
                                             </h1>
                                             <div className="links" style={{marginLeft: '6.35vw', marginRight: '0', marginBottom: '1em', width: '1300px'}}>
-                                                <span className="head-link">{page.referenceLink}</span>
+                                                <span className="head-link">
+                                                    <input 
+                                                        style={{border: 'none', borderBottom: '1px solid gray', width: '30em'}}
+                                                        onChange={ e => this.setState({referenceLink: e.target.value})}
+                                                        defaultValue={page.referenceLink}
+                                                    >
+                                                    </input>
+                                                </span>
                                                 <p className="head-edittime">{page.updatedAt}</p>
                                             </div>
                                             <div className="btn-group" style={{width: '120px'}} role="group">
@@ -411,12 +440,14 @@ class Edit extends Component {
                                                             type="button" 
                                                             onClick={async () => {
                                                                 const response = await mutate({
-                                                                    variables: { pageId: id, content: textContents, description: tldr }
+                                                                    variables: { pageId: id, content: textContents, description: tldr, title: newTitle, referenceLink: referenceLink, thesisAuthor: thesisAuthor }
                                                                 })
                                                                 let respObj = _.get(response, 'data.pages.update', {})
                                                                 if (respObj.responseResult.succeeded) {
                                                                     _.delay(() => {
                                                                         window.location.replace(`/main/${id}/${title}`)
+                                                                        // console.log(this.state)
+                                                                        // console.log(respObj.page)
                                                                         return
                                                                     })
                                                                 }
@@ -429,7 +460,14 @@ class Edit extends Component {
                                             </div>
                                             <div className="author">
                                                 <img src={authorbox} style={{marginRight: '20px'}} />
-                                                <span className="head-auhtor">{page.thesisAuthor}</span>
+                                                <span className="head-auhtor">
+                                                    <input 
+                                                        style={{border: 'none', borderBottom: '1px solid gray'}}
+                                                        onChange={ e => this.setState({thesisAuthor: e.target.value})}
+                                                        defaultValue={page.thesisAuthor}
+                                                    >
+                                                    </input>
+                                                </span>
                                             </div>
                                         </header>
                                     </div>

@@ -166,8 +166,6 @@ class Main extends Component {
                         let description = page.description
                         let tlDescription = description.split("\n")
 
-
-
                         return (
                             <div id="main" className="site-wrapper" style={{margin: '1em', minWidth: '1240px'}}>
                                 <div className="container" style={{maxWidth: '1800px'}}>
@@ -199,7 +197,7 @@ class Main extends Component {
                                     </div>
                                 </div>
                                 <div className="tldr">
-                                    <p className="tldr-title">TL;DR</p>
+                                    <p className="tldr-title">세 줄 요약</p>
                                     <ol className="tldr-content" type="i">
                                         <li className="tldr-content-listitem">{tlDescription[0]}<br /></li>
                                         <li className="tldr-content-listitem">{tlDescription[1]}<br /></li>
