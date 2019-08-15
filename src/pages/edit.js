@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import _ from 'lodash';
 import markdownToHTML from '../lib/markdownEditor';
 import { Query, Mutation } from 'react-apollo';
 import { PAGE_QUERY, PAGE_CREATE_MUTATION } from '../queries';
 import Cookies from 'js-cookie';
-import jwt from 'jsonwebtoken';
 import "../assets/bootstrap/css/bootstrap.min.css";
 import "../assets/css/styles.css";
 import facered from "../assets/img/facered.png";
@@ -41,7 +41,7 @@ class Edit extends Component {
         this.switch = this.switch.bind(this);
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         const jwtCookie = Cookies.get('jwt');
         if (jwtCookie === "null") {
             alert("You should login to modify content")
@@ -55,24 +55,23 @@ class Edit extends Component {
         }
     }
 
-    handleLogout = e => {
+    handleLogout = () => {
         Cookies.set('jwt', null)
         window.location.reload()
     }
     
-    gotoSearch = e => {
+    gotoSearch = () => {
         const search = this.state.search;
         if (search !== "") {
           window.location.pathname = `/search/${search}`
         }
     }
 
-    gotoHome = e => {
+    gotoHome = () => {
         window.location.pathname = "/";
     }
 
     setData = data => {
-        console.log(data)
         let nRows = (data.split('\n')).length;
         if (this.state.isFirst) {
             let initialTextList = [];
@@ -150,16 +149,16 @@ class Edit extends Component {
             />
             <div style={{width: '10em', float: 'right', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: '-10px'}}>
                 <button id={`button-confirm-${index}`} style={{background: 'none', border: 'none'}} onClick={this.convertBox}>
-                    ⭕
+                    <span role="img" aria-label="confirm">⭕</span>
                 </button>
                 <button id={`button-delete-${index}`} style={{background: 'none', border: 'none'}} onClick={this.deleteBox}>
-                    ❌
+                    <span role="img" aria-label="delete">❌</span>
                 </button>
                 <button id={`button-up-${index}`} style={{background: 'none', border: 'none'}} onClick={this.upBox}>
-                    🔺
+                    <span role="img" aria-label="up">🔺</span>
                 </button>
                 <button id={`button-down-${index}`} style={{background: 'none', border: 'none'}} onClick={this.downBox}>
-                    🔻
+                    <span role="img" aria-label="down">🔻</span>
                 </button>
             </div>
         </div>
@@ -304,7 +303,7 @@ class Edit extends Component {
 
     convertBox = e => {
         e.preventDefault()
-        if (e.currentTarget.className == 'output') {
+        if (e.currentTarget.className === 'output') {
             let boxList = this.state.boxList;
             let boxNumber = (e.currentTarget.id).slice(-1);
             let inputBox = this.getInputBox(boxNumber, this.state.textList[boxNumber])
@@ -331,16 +330,14 @@ class Edit extends Component {
     render() {
         const id = parseInt(this.props.match.params.pageId, 10);
         const textList = this.state.textList;
-        const title = this.props.match.params.pageTitle;
 
         let textContents = "";
         for (let i=0;i<textList.length;i++) {
             textContents += (textList[i]+ "\n")
         }
-        let { newTitle, referenceLink, thesisAuthor, updatedAt } = this.state;
+        let { title, referenceLink, thesisAuthor } = this.state;
         let tldr = this.state.tldr;
         tldr = tldr.join("\n");
-        console.log(typeof(this.state.updatedAt))
 
         return (
             <div>
@@ -349,7 +346,7 @@ class Edit extends Component {
                 <title>Editting page</title>
                 <header className="site-header" style={{minWidth: '1240px', paddingLeft: 0, paddingRight: 0, paddingTop: '4px'}}>
                     <div className="container" style={{margin: 0, paddingBottom: '4px', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingLeft: '75px', paddingRight: '50px', maxWidth: '100%'}}>
-                        <img src={logo3_editted_cut} style={{cursor: 'pointer', height: '5em', marginRight: '3em', paddingBottom: '0px'}} onClick={this.gotoHome} />
+                        <img src={logo3_editted_cut} alt="logo" style={{cursor: 'pointer', height: '5em', marginRight: '3em', paddingBottom: '0px'}} onClick={this.gotoHome} />
                         <div style={{display: 'flex', width: '60vw', }}>
                             <input 
                                 className="form-control-lg" 
@@ -379,6 +376,7 @@ class Edit extends Component {
                             <img 
                                 className="rounded-circle border border-dark Thumbnail" 
                                 src={facered} 
+                                alt="profile"
                                 style={{height: '50px', marginTop: '8px'}} 
                             />
                             <i 
@@ -401,7 +399,7 @@ class Edit extends Component {
                 >
                     {({ loading, data, error }) => {
                         if (loading) return "loading"
-                        if (error) {console.log(error); return "something happened"}
+                        if (error) return "something happened"
                         const page = data.pages.single;
                         let description = page.description;
                         let tlDescription = description.split("\n")
@@ -416,6 +414,7 @@ class Edit extends Component {
                                                     style={{border: 'none', borderBottom: '1px solid gray'}}
                                                     onChange={ e => this.setState({title: e.target.value})}
                                                     defaultValue={page.title}
+                                                    placeholder="Title"
                                                 >
                                                 </input>
                                                 <br />
@@ -426,6 +425,7 @@ class Edit extends Component {
                                                         style={{border: 'none', borderBottom: '1px solid gray', width: '30em'}}
                                                         onChange={ e => this.setState({referenceLink: e.target.value})}
                                                         defaultValue={page.referenceLink}
+                                                        placeholder="Reference Link"
                                                     >
                                                     </input>
                                                 </span>
@@ -440,31 +440,31 @@ class Edit extends Component {
                                                             type="button" 
                                                             onClick={async () => {
                                                                 const response = await mutate({
-                                                                    variables: { pageId: id, content: textContents, description: tldr, title: newTitle, referenceLink: referenceLink, thesisAuthor: thesisAuthor }
+                                                                    variables: { pageId: id, content: textContents, description: tldr, title: title, referenceLink: referenceLink, thesisAuthor: thesisAuthor }
                                                                 })
                                                                 let respObj = _.get(response, 'data.pages.update', {})
                                                                 if (respObj.responseResult.succeeded) {
                                                                     _.delay(() => {
                                                                         window.location.replace(`/main/${id}/${title}`)
-                                                                        // console.log(this.state)
-                                                                        // console.log(respObj.page)
                                                                         return
                                                                     })
                                                                 }
                                                             }}
                                                         >
                                                             저장하기
-                                                        </button>
+                                                        </button> 
+                                                        
                                                     )}
                                                 </Mutation>
                                             </div>
                                             <div className="author">
-                                                <img src={authorbox} style={{marginRight: '20px'}} />
+                                                <img src={authorbox} alt="authorbox" style={{marginRight: '20px', height: '100%'}} />
                                                 <span className="head-auhtor">
                                                     <input 
                                                         style={{border: 'none', borderBottom: '1px solid gray'}}
                                                         onChange={ e => this.setState({thesisAuthor: e.target.value})}
                                                         defaultValue={page.thesisAuthor}
+                                                        placeholder="Author"
                                                     >
                                                     </input>
                                                 </span>
@@ -538,6 +538,15 @@ class Edit extends Component {
             </div>
         )
     }
+}
+
+Edit.propTypes = {
+    match: PropTypes.shape({
+        params: PropTypes.shape({
+        title: PropTypes.string,
+        pageId: PropTypes.string
+        })
+    }),
 }
 
 export default Edit;

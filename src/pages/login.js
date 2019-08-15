@@ -26,15 +26,12 @@ class Login extends Component {
 
     render() {
         console.log(this.props)
-        const { email, username, password, strategy } = this.state;
+        const { username, password, strategy } = this.state;
         return (
             <div>
                 <meta charSet="utf-8" />
                 <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
                 <title>login</title>
-                {/*<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Gugi" />
-                <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Merriweather" />
-                <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nanum+Gothic" />*/}
                 <div className="wrap">
                     <div className="header" style={{paddingTop: '132px', width: '1024px', margin: '0 auto'}}>
                     <h1>

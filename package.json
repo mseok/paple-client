@@ -42,7 +42,7 @@
     "vuex-pathify": "^1.2.4"
   },
   "scripts": {
-    "start": "set PORT=4000 && react-scripts start",
+    "start": "set PORT=5000 && react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -52,6 +52,7 @@
       "airbnb",
       "prettier"
     ],
+    "parser": "babel-eslint",
     "rules": {
       "react/prefer-stateless-function": 0,
       "react/jsx-filename-extension": 0,
@@ -75,6 +76,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
-    "@babel/preset-env": "^7.5.5"
+    "@babel/preset-env": "^7.5.5",
+    "eslint-plugin-prettier": "^3.1.0"
   }
 }

@@ -4,6 +4,7 @@ import ReactHtmlParser from 'react-html-parser';
 import { PAGE_QUERY } from '../queries';
 import Cookies from 'js-cookie';
 import jwt from 'jsonwebtoken';
+import PropTypes from 'prop-types';
 import facered from "../assets/img/facered.png";
 import authorbox from "../assets/img/authorbox.png";
 import logo3_editted_cut from "../assets/img/logo3_editted_cut.svg";
@@ -27,7 +28,7 @@ class Main extends Component {
         this.state = {initialState}
     }
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
         const jwtCookie = Cookies.get('jwt');
         if (jwtCookie) {
             try {
@@ -48,39 +49,38 @@ class Main extends Component {
         }
     }
 
-    gotoLogin = e => {
+    gotoLogin = () => {
         window.location.pathname = "/login"
-        this.props.history.push(window.location.pathname)
     }
 
-    gotoSignup = e => {
+    gotoSignup = () => {
         window.location.pathname = "/signup"
     }
 
-    gotoSearch = e => {
+    gotoSearch = () => {
         const search = this.state.search;
         if (search !== "") {
           window.location.pathname = `/search/${search}`
         }
     }
 
-    gotoEdit = e => {
+    gotoEdit = () => {
         const id = parseInt(this.props.match.params.pageId, 10);
         const title = window.document.getElementById('page-title').textContent;
         window.location.pathname = `/edit/${id}/${title}`
     }
 
-    gotoLog = e => {
+    gotoLog = () => {
         const id = parseInt(this.props.match.params.pageId, 10);
         const title = window.document.getElementById('page-title').textContent;
         window.location.pathname = `/log/${id}/${title}`
     }
 
-    gotoHome = e => {
+    gotoHome = () => {
         window.location.pathname = "/";
     }
 
-    handleLogout = e => {
+    handleLogout = () => {
         Cookies.set('jwt', null)
         window.location.reload()
     }
@@ -94,7 +94,7 @@ class Main extends Component {
                 <title>Editting page</title>
                 <header className="site-header" style={{minWidth: '1240px', paddingLeft: 0, paddingRight: 0, paddingTop: '4px'}}>
                     <div className="container" style={{margin: 0, paddingBottom: '4px', display: 'flex', flexDirection: 'row', justifyContent: 'space-between', paddingLeft: '75px', paddingRight: '50px', maxWidth: '100%'}}>
-                        <img src={logo3_editted_cut} style={{cursor: 'pointer', height: '5em', marginRight: '3em', paddingBottom: '0px'}} onClick={this.gotoHome} />
+                        <img src={logo3_editted_cut} alt="logo" style={{cursor: 'pointer', height: '5em', marginRight: '3em', paddingBottom: '0px'}} onClick={this.gotoHome} />
                         <div style={{display: 'flex', width: '60vw', }}>
                             <input 
                                 className="form-control-lg" 
@@ -126,6 +126,7 @@ class Main extends Component {
                                 <img 
                                     className="rounded-circle border border-dark Thumbnail" 
                                     src={facered} 
+                                    alt="profile"
                                     style={{height: '50px', marginTop: '8px'}} 
                                 />
                                 <i 
@@ -176,7 +177,7 @@ class Main extends Component {
                                                 <br />
                                             </h1>
                                             <div className="links" style={{marginLeft: '6.35vw', marginBottom: '1em', width: '1300px'}}>
-                                                <span className="head-link">{page.referenceLink}</span>
+                                                <a className="head-link" href={page.referenceLink}>{page.referenceLink}</a>
                                                 <p className="head-edittime">{page.updatedAt}</p>
                                             </div>
                                             {this.state.logIn ? 
@@ -190,7 +191,7 @@ class Main extends Component {
                                                 </div>
                                             )}
                                             <div className="author">
-                                                <img src={authorbox} style={{marginRight: '20px'}} />
+                                                <img src={authorbox} alt="authorbox" style={{marginRight: '20px', height: '100%'}} />
                                                 <span className="head-auhtor">{page.thesisAuthor}</span>
                                             </div>
                                         </header>
@@ -219,30 +220,12 @@ class Main extends Component {
     }
 }
 
-{/* 
-<header style={{fontSize: '7em', fontFamily: '"Poiret One", cursive', letterSpacing: '-4px', marginTop: '70px'}}>
-    <p 
-        className="d-xl-flex" 
-        style={{fontFamily: '"Poiret One", cursive', color: 'rgba(141,75,75,0.55)'}}
-    >
-        0. Abstract
-    </p>
-</header>
-<article className="post-content">
-    <p className="lead">
-        <br />
-    </p>
-    <p className="lead">when use this, you can add all shit</p>
-    <p className="lead">Or just you might find someone else that you can love, and that is the power of an evil. Paragraph options contain lead, but text options are in charge of its alignment, color, transformations, monospace, wrap, truncate etc.</p>
-</article>
-<blockquote className="blockquote" style={{paddingTop: '1em', paddingRight: '4em', paddingBottom: '1em', paddingLeft: '4em', marginLeft: '12.5vw', marginRight: '550px', marginTop: '2em', marginBottom: '2em', textIndent: 0, width: '55em'}}>
-    <p className="blockquote-paragraph" style={{fontFamily: 'Montserrat, sans-serif', fontSize: '2em'}}>
-        you can add this quotes as just one click with just a simple method. Though it could be worse, you are gonna be alright.
-    </p>
-    <footer className="blockquote-footer d-xl-flex justify-content-xl-end" style={{fontFamily: 'Montserrat, sans-serif'}}>
-        Someone famous
-    </footer>
-</blockquote>
-*/}
+Main.propTypes = {
+    match: PropTypes.shape({
+      params: PropTypes.shape({
+        pageId: PropTypes.string,
+      }),
+    }),
+};
 
 export default Main;

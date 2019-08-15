@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import MarkdownIt from 'markdown-it';
 import mdAttrs from 'markdown-it-attrs';
 import mdEmoji from 'markdown-it-emoji';
