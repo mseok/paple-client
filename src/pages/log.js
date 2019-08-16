@@ -187,6 +187,50 @@ class Log extends Component {
           </div>
           <div className="clearfix" />
         </header>
+        <div
+          id="main"
+          className="site-wrapper"
+          style={{ margin: '1em', minWidth: '1240px', fontSize: '9px' }}
+        >
+          <div className="container" style={{ maxWidth: '1800px' }}>
+            <div className="post">
+              <div className="icon-box">
+                <div className="text-center" id="iconbox">
+                  <i className="fa fa-calendar-o" />
+                </div>
+                <div id="iconbox" className="text-center">
+                  <i className="fa fa-clock-o" />
+                </div>
+                <div id="iconbox" className="text-center">
+                  <i className="fa fa-user" />
+                </div>
+                <div id="iconbox" className="text-center">
+                  <i className="fa fa-desktop" />
+                </div>
+                <div id="iconbox" className="text-center">
+                  <i className="fas fa-burn" />
+                </div>
+              </div>
+              <div id="nametag">
+                <div id="iconbox" className="text-center date">
+                  <p id="date">2019-08-14</p>
+                </div>
+                <div id="iconbox" className="text-center time">
+                  <p id="time">14:00:00</p>
+                </div>
+                <div id="iconbox" className="text-center username">
+                  <p id="username">SSSSSSHWAN</p>
+                </div>
+                <div id="iconbox" className="text-center clicklink">
+                  <p id="clicklink">Click</p>
+                </div>
+                <div id="iconbox" className="text-center rate">
+                  <p id="rate">105</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <Query
           query={LOG_QUERY}
           variables={{ pageId: 6, offsetPage: 1, offsetSize: 1 }}
