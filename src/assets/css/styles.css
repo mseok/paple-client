@@ -5,7 +5,8 @@
   padding: 1em;
 }
 
-.container {}
+.container {
+}
 
 img ::before {
   content: '';
@@ -178,8 +179,7 @@ img ::before {
   word-break: break-word;
 }
 
-.btn-group,
-.btn-group-vertical {
+.btn-group, .btn-group-vertical {
   float: right;
   top: -15px;
   right: 0;
@@ -230,7 +230,7 @@ img ::before {
   will-change: transform;
   top: 0px;
   left: 0px;
-  transform: translate3d(350px, 600px, 0);
+  transform: translate3d(350px,600px,0);
   box-sizing: border-box;
   margin-bottom: 0.5em;
   border-radius: 4px;
@@ -263,10 +263,6 @@ img ::before {
   border-color: #DE1738;
 }
 
-div {}
-
-div {}
-
 .search-box {
   font-size: 4em;
   font-family: Merriweather, serif;
@@ -284,6 +280,47 @@ div {}
   padding-left: 0.4em;
   position: relative;
   height: auto;
+}
+
+.icon-box {
+  font-size: 4em;
+  font-family: Merriweather, serif;
+  /*width: 1300px;*/
+  margin-top: 1em;
+  margin-bottom: 0.3em;
+  margin-left: 6.35vw;
+  margin-right: 7vw;
+  font-size: 2.5em;
+  padding: 0;
+  background-color: #fff;
+  padding-left: 0.4em;
+  position: relative;
+  height: auto;
+  display: flex;
+  justify-content: space-between;
+  border-bottom-style: solid;
+  border-bottom-color: #DDDCC5;
+  border-bottom-width: 1px;
+}
+
+.name-box {
+  font-family: Merriweather, serif;
+  /*width: 1300px;*/
+  margin-top: -0.2em;
+  /*margin-bottom: 0.3em;*/
+  margin-left: 6.35vw;
+  margin-right: 7vw;
+  font-size: 2.5em;
+  padding: 0;
+  background-color: #fff;
+  padding-left: 0.4em;
+  position: relative;
+  height: auto;
+  display: flex;
+  justify-content: space-around;
+  border-bottom-style: solid;
+  border-bottom-color: #DDDCC5;
+  border-bottom-width: 1px;
 }
 
 #subbox {
@@ -335,6 +372,17 @@ div {}
   display: flex;
 }
 
+#nametag {
+  font-size: 15px;
+  font-family: 'roboto';
+  display: flex;
+  justify-content: space-around;
+  margin-left: 6.35vw;
+  margin-right: 7vw;
+  margin-bottom: -10px;
+  padding-left: 16px;
+}
+
 #button-signup {
   background-color: #FFFFFF;
   color: #611427;
@@ -356,3 +404,11 @@ div {}
 *:focus {
   outline: none !important;
 }
+
+#iconbox {
+  width: 20%;
+}
+
+#date {
+}
+
